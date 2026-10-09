@@ -1,0 +1,14 @@
+@ensdomains/=lib/v4-hooks-public/lib/v4-periphery/lib/v4-core/node_modules/@ensdomains/
+briefcase/=lib/v4-hooks-public/lib/briefcase/src/
+forge-std/=lib/forge-std/src/
+@openzeppelin/=lib/openzeppelin-contracts/
+@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/
+openzeppelin-contracts/=lib/openzeppelin-contracts/
+permit2/=lib/v4-hooks-public/lib/v4-periphery/lib/permit2/
+solmate/=lib/v4-hooks-public/lib/v4-periphery/lib/permit2/lib/solmate/
+@uniswap/universal-router/=dependencies/universal-router/
+@uniswap/v4-periphery/=dependencies/universal-router/lib/v4-periphery/
+@uniswap/v4-core/=lib/v4-hooks-public/lib/v4-periphery/lib/v4-core/
+v4-hooks-public/=lib/v4-hooks-public/
+v4-core/=lib/v4-hooks-public/lib/v4-periphery/lib/v4-core/src/
+v4-periphery/=lib/v4-hooks-public/lib/v4-periphery/

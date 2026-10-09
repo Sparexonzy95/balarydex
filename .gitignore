@@ -1,0 +1,56 @@
+# ==============================================================================
+# Balary DEX - Global .gitignore
+# ==============================================================================
+
+# Environment variables & secrets (CRITICAL)
+.env
+.env.*
+!.env.example
+!*.env.example
+*.pem
+*.key
+contracts/.env
+frontend/.env
+docs/.env
+
+# Foundry build artifacts & sensitive broadcast traces
+contracts/out/
+contracts/cache/
+contracts/broadcast/
+broadcast/
+.forge-snapshots/
+
+# Node.js dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Production builds
+dist/
+build/
+.next/
+out/
+
+# Storage backups & scratch files
+.mlswap_storage/
+.mlswap_storage_backup/
+frontend/.mlswap_storage/
+frontend/.mlswap_storage_backup/
+.system_generated/
+*.tmp
+*.temp
+*.log
+
+# Operating system files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# IDE & Editor configurations
+.vscode/
+.idea/
+*.swp
+*.swo

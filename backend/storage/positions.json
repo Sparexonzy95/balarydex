@@ -1,0 +1,34 @@
+[
+  {
+    "tokenId": "1",
+    "subgraphId": "1",
+    "owner": "0x99bc52a8aa5931a652620e901bf434ded949348d",
+    "currency0": "0x63647642133bBdF0461bcf7BF6c360e1969B1194",
+    "currency1": "0x6841fdF52E3398DC43cDb042292B0ECb53FA8737",
+    "fee": 3000,
+    "feePct": "0.30%",
+    "tickSpacing": 60,
+    "hooks": "0x0000000000000000000000000000000000000000",
+    "tickLower": 91920,
+    "tickUpper": 92280,
+    "priceLower": 9813.756753081432,
+    "priceUpper": 10173.470003079852,
+    "token0": {
+      "address": "0x63647642133bBdF0461bcf7BF6c360e1969B1194",
+      "name": "Wrapped Litecoin",
+      "symbol": "WLTC",
+      "decimals": 18,
+      "logo": "/tokens/wltc.svg",
+      "priceUSD": 100
+    },
+    "token1": {
+      "address": "0x6841fdF52E3398DC43cDb042292B0ECb53FA8737",
+      "name": "SoftDAO",
+      "symbol": "SOFT",
+      "decimals": 18,
+      "logo": "/assets/0x8c277c071D42987Ef7712d135C4da1f46EA8Af8d/logo.png",
+      "priceUSD": 0.1
+    },
+    "createdAtTimestamp": 1760001000
+  }
+]

@@ -1,0 +1,184 @@
+
+REDEPLOY ALL CONTRACTS USING UNIVERSALROUTER dependencies
+
+forge remappings > remappings.txt
+
+
+@uniswap/v4-periphery/=dependencies/universal-router/lib/v4-periphery/
+use this for universal router deployment
+
+forge install OpenZeppelin/openzeppelin-contracts --no-git --shallow
+forge install Uniswap/v4-hooks-public --no-git --shallow
+forge install Uniswap/universal-router
+
+forge test test/MultiTokenFaucetTest.sol:MultiTokenFaucetTest
+
+# 1. Deploy 3 tokens
+forge script script/DeployTokens.s.sol \
+  --rpc-url arc_mainnet \
+  --account myWallet \
+  --sender 0x5Ac521f6814c2D09188A6838e7CDBfe7aEaC0cf9 \
+  --broadcast
+
+
+# 2. Mine the salt first (no broadcast, just logs)
+forge script script/MineMUSDC.s.sol \
+  --sig "mine()" \
+  --rpc-url arc_mainnet \
+  --account myWallet
+
+
+# 3. Once you have the salt, set it and deploy
+echo "MUSDC_SALT=0x00000000000000000000000000000000000000000000000000000000000001d0" >> .env
+forge script script/MineMUSDC.s.sol \
+  --rpc-url arc_mainnet \
+  --account myWallet \
+  --sender 0x5Ac521f6814c2D09188A6838e7CDBfe7aEaC0cf9 \
+  --broadcast
+
+  mUSDC deployed at: 0x36bEE8F2DF69Cf3AFAb5c5ccA973fEb6441cAb11
+
+// DEPLOY POOLMANAGER
+forge script script/DeployPM.s.sol \
+  --rpc-url arc_mainnet \
+  --account myWallet \
+  --sender 0x5Ac521f6814c2D09188A6838e7CDBfe7aEaC0cf9 \
+  --broadcast
+
+Contract Address: 0xC8d4D8fd9121D92ba790A70a60c07143A2C0Cd98
+
+// verify contracts
+forge verify-contract \
+  --chain-id 5042002 \
+  --verifier blockscout \
+  --verifier-url https://testnet.arcscan.app/api \
+  --constructor-args $(cast abi-encode "constructor(address)" 0x5Ac521f6814c2D09188A6838e7CDBfe7aEaC0cf9) \
+  --watch \
+  0xC8d4D8fd9121D92ba790A70a60c07143A2C0Cd98 \
+  lib/v4-hooks-public/lib/v4-periphery/lib/v4-core/src/PoolManager.sol:PoolManager
+
+
+// DEPLOY QUOTER
+forge script script/DeployQuoter.s.sol \
+  --rpc-url arc_mainnet \
+  --account myWallet \
+  --sender 0x5Ac521f6814c2D09188A6838e7CDBfe7aEaC0cf9 \
+  --broadcast
+
+Contract Address: 0xA4486183f478315f2d5635Fdb4eD37D4841eC904
+
+// verify contracts
+forge verify-contract \
+  --chain-id 5042002 \
+  --verifier blockscout \
+  --verifier-url https://testnet.arcscan.app/api \
+  --constructor-args $(cast abi-encode "constructor(address)" 0xC8d4D8fd9121D92ba790A70a60c07143A2C0Cd98) \
+  --watch \
+  0xA4486183f478315f2d5635Fdb4eD37D4841eC904 \
+  lib/v4-hooks-public/lib/v4-periphery/src/lens/V4Quoter.sol:V4Quoter
+// try to verify quoter again
+
+
+// DEPLOY PERMIT2
+forge script script/DeployPermit2.s.sol \
+  --rpc-url arc_mainnet \
+  --account myWallet \
+  --sender 0x5Ac521f6814c2D09188A6838e7CDBfe7aEaC0cf9 \
+  --broadcast
+
+Contract Address: 0xC733B042D7f7785af5606012831705797A7285f1
+
+// verify contracts
+forge verify-contract \
+  --chain-id 5042002 \
+  --verifier blockscout \
+  --verifier-url https://testnet.arcscan.app/api \
+  --watch \
+  0xC733B042D7f7785af5606012831705797A7285f1 \
+  lib/v4-hooks-public/lib/v4-periphery/lib/permit2/src/Permit2.sol:Permit2
+
+
+// DEPLOY POSITIONMANAGER
+forge script script/DeployPositionManager.s.sol \
+  --rpc-url arc_mainnet \
+  --account myWallet \
+  --sender 0x5Ac521f6814c2D09188A6838e7CDBfe7aEaC0cf9 \
+  --broadcast
+
+Contract Address: 0xae44E6C67c2Bd22512727009C20Eba2F8bcF95b0
+// verify contracts (include --constructor-args)
+forge verify-contract \
+  --chain-id 5042002 \
+  --verifier blockscout \
+  --verifier-url https://testnet.arcscan.app/api \
+  --watch \
+  0xae44E6C67c2Bd22512727009C20Eba2F8bcF95b0 \
+  lib/v4-hooks-public/lib/v4-periphery/src/PositionManager.sol:PositionManager
+
+
+// DEPLOY STATEVIEW
+forge script script/DeployStateView.s.sol \
+  --rpc-url arc_mainnet \
+  --account myWallet \
+  --sender 0x5Ac521f6814c2D09188A6838e7CDBfe7aEaC0cf9 \
+  --broadcast
+
+Contract Address: 0x289168d534c9cC5639537653Ddcb418e22c8ee59
+
+// verify contracts
+forge verify-contract \
+  --chain-id 5042002 \
+  --verifier blockscout \
+  --verifier-url https://testnet.arcscan.app/api \
+  --constructor-args $(cast abi-encode "constructor(address)" 0xC8d4D8fd9121D92ba790A70a60c07143A2C0Cd98) \
+  --watch \
+  0x289168d534c9cC5639537653Ddcb418e22c8ee59 \
+  lib/v4-hooks-public/lib/v4-periphery/src/lens/StateView.sol:StateView
+
+
+// DEPLOY UNIVERSALROUTER
+forge script script/DeployUniversalRouter.s.sol \
+  --rpc-url arc_mainnet \
+  --account myWallet \
+  --sender 0x5Ac521f6814c2D09188A6838e7CDBfe7aEaC0cf9 \
+  --broadcast
+
+Contract Address: 0xd03307a0d5092B17C12cA9380f707f7d7FCD8f09
+
+
+// DEPLOY MULTITOKENFAUCET
+forge script script/DeployMultiTokenFaucet.sol \
+  --rpc-url arc_mainnet \
+  --account myWallet \
+  --sender 0x5Ac521f6814c2D09188A6838e7CDBfe7aEaC0cf9 \
+  --broadcast
+
+Contract Address: 0xB777176ea921D4aA8Ab9aD6163c8bafacdCbeD44
+
+
+// RUN ADMINFAUCET
+forge script script/AdminFaucet.sol \
+  --rpc-url arc_mainnet \
+  --account myWallet \
+  --sender 0x5Ac521f6814c2D09188A6838e7CDBfe7aEaC0cf9 \
+  --broadcast
+
+
+// DEPLOY POINTSHOOK
+forge script script/DeployPointsHook.s.sol \
+  --rpc-url arc_mainnet \
+  --account myWallet \
+  --sender 0x5Ac521f6814c2D09188A6838e7CDBfe7aEaC0cf9 \
+  --broadcast
+
+
+// verify contract
+forge verify-contract \
+  --chain-id 5042002 \
+  --verifier blockscout \
+  --verifier-url https://testnet.arcscan.app/api \
+  --compiler-version 0.8.35 \
+  --constructor-args $(cast abi-encode "constructor(address)" 0xC8d4D8fd9121D92ba790A70a60c07143A2C0Cd98) \
+  --watch \
+  0xd523232b30b61be4c74937be5313d2cbd1748040 \
+  src/PointsHook.sol:PointsHook

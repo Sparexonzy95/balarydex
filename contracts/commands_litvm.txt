@@ -1,0 +1,109 @@
+# ========================================================
+# BALARY ON LITVM (LiteForge Testnet) DEPLOYMENT GUIDE
+# Chain ID: 4441 | RPC: https://liteforge.rpc.caldera.xyz/http
+# Explorer: https://liteforge.explorer.caldera.xyz
+# Native Token: zkLTC
+# ========================================================
+
+# Setup Environment
+# Ensure .env has:
+# ADDRESS_TO_MINT_TO=0xYourWalletAddress
+# Or import an encrypted keystore account:
+# cast wallet import myWallet --interactive
+
+# --------------------------------------------------------
+# Step 1: Deploy Balary Test Tokens & Faucet
+# --------------------------------------------------------
+forge script script/DeployTokens.s.sol \
+  --rpc-url litvm_testnet \
+  --account myWallet \
+  --sender <YOUR_ADDRESS> \
+  --broadcast
+
+# Record the deployed addresses for:
+# BAL (Balary): 0x...
+# USDC: 0x...
+# WLTC: 0x...
+# SOFT: 0x...
+# MONKE: 0x...
+
+# --------------------------------------------------------
+# Step 2: Deploy Uniswap v4 PoolManager
+# --------------------------------------------------------
+forge script script/DeployPM.s.sol \
+  --rpc-url litvm_testnet \
+  --account myWallet \
+  --sender <YOUR_ADDRESS> \
+  --broadcast
+
+# Verify PoolManager:
+forge verify-contract \
+  --chain-id 4441 \
+  --verifier blockscout \
+  --verifier-url https://liteforge.explorer.caldera.xyz/api \
+  --constructor-args $(cast abi-encode "constructor(address)" <YOUR_ADDRESS>) \
+  <POOLMANAGER_ADDRESS> \
+  lib/v4-hooks-public/lib/v4-periphery/lib/v4-core/src/PoolManager.sol:PoolManager
+
+# --------------------------------------------------------
+# Step 3: Deploy V4Quoter
+# --------------------------------------------------------
+forge script script/DeployQuoter.s.sol \
+  --rpc-url litvm_testnet \
+  --account myWallet \
+  --sender <YOUR_ADDRESS> \
+  --broadcast
+
+# --------------------------------------------------------
+# Step 4: Deploy Permit2
+# --------------------------------------------------------
+forge script script/DeployPermit2.s.sol \
+  --rpc-url litvm_testnet \
+  --account myWallet \
+  --sender <YOUR_ADDRESS> \
+  --broadcast
+
+# --------------------------------------------------------
+# Step 5: Deploy PositionManager & PositionDescriptor
+# --------------------------------------------------------
+forge script script/DeployPositionManager.s.sol \
+  --rpc-url litvm_testnet \
+  --account myWallet \
+  --sender <YOUR_ADDRESS> \
+  --broadcast
+
+# --------------------------------------------------------
+# Step 6: Deploy StateView
+# --------------------------------------------------------
+forge script script/DeployStateView.s.sol \
+  --rpc-url litvm_testnet \
+  --account myWallet \
+  --sender <YOUR_ADDRESS> \
+  --broadcast
+
+# --------------------------------------------------------
+# Step 7: Deploy UniversalRouter
+# --------------------------------------------------------
+forge script script/DeployUniversalRouter.s.sol \
+  --rpc-url litvm_testnet \
+  --account myWallet \
+  --sender <YOUR_ADDRESS> \
+  --broadcast
+
+# --------------------------------------------------------
+# Step 8: Mine Hook Salt & Deploy Balary PointsHook
+# --------------------------------------------------------
+# PointsHook requires AFTER_SWAP_FLAG (bit 6 = 1 << 6).
+forge script script/DeployPointsHook.s.sol \
+  --rpc-url litvm_testnet \
+  --account myWallet \
+  --sender <YOUR_ADDRESS> \
+  --broadcast
+
+# --------------------------------------------------------
+# Step 9: Update Frontend Config
+# --------------------------------------------------------
+# Copy the final deployed addresses into:
+# 1) balary-contracts/deployments.txt
+# 2) mlSwap-frontend/src/lib/constants.ts
+# 3) mlSwap-frontend/src/config/tokens.ts

@@ -1,0 +1,162 @@
+[
+  {
+    "id": "0x1b50d9d66a4dc3bdda3853679faed7e34e2e1f480bcb0a65b9034452f25376ee-55",
+    "timestamp": "1791557655",
+    "sender": "0x82B2154be998895317FFe02f25F2Da3B40B2F14a",
+    "origin": "0x82B2154be998895317FFe02f25F2Da3B40B2F14a",
+    "pool": {
+      "id": "0x513f96f9eeb38492ab513e81db78807dbd85aae644d08348abb94367fc8b06e6"
+    },
+    "token0": {
+      "id": "0xA9a29BA9C693Fe87Bb929322DD96728E61f6a1ed",
+      "symbol": "MONKE",
+      "name": "MONKE",
+      "decimals": 18,
+      "derivedUSDC": "0.001"
+    },
+    "token1": {
+      "id": "0xD88cA23473DF0fAf9FCDE8d6880f4c8b88df69A5",
+      "symbol": "USDC",
+      "name": "USD Coin",
+      "decimals": 6,
+      "derivedUSDC": "1"
+    },
+    "amount0": "20000.0000",
+    "amount1": "18.51",
+    "amountUSD": "20.00",
+    "feeUSD": "0.0600",
+    "sqrtPriceX96": "2325277779831838528440",
+    "tick": "-346898",
+    "transaction": {
+      "id": "0x1b50d9d66a4dc3bdda3853679faed7e34e2e1f480bcb0a65b9034452f25376ee"
+    }
+  },
+  {
+    "id": "0x1b50d9d66a4dc3bdda3853679faed7e34e2e1f480bcb0a65b9034452f25376ee-50",
+    "timestamp": "1791557655",
+    "sender": "0x82B2154be998895317FFe02f25F2Da3B40B2F14a",
+    "origin": "0x82B2154be998895317FFe02f25F2Da3B40B2F14a",
+    "pool": {
+      "id": "0x2e3b530423035fee42acb915db3269c33b253d8667cbd4ef942183fecf38f762"
+    },
+    "token0": {
+      "id": "0x6841fdF52E3398DC43cDb042292B0ECb53FA8737",
+      "symbol": "SOFT",
+      "name": "SoftDAO",
+      "decimals": 18,
+      "derivedUSDC": "0.1"
+    },
+    "token1": {
+      "id": "0xD88cA23473DF0fAf9FCDE8d6880f4c8b88df69A5",
+      "symbol": "USDC",
+      "name": "USD Coin",
+      "decimals": 6,
+      "derivedUSDC": "1"
+    },
+    "amount0": "100.0000",
+    "amount1": "9.89",
+    "amountUSD": "10.00",
+    "feeUSD": "0.0300",
+    "sqrtPriceX96": "24861555990479182240136",
+    "tick": "-299506",
+    "transaction": {
+      "id": "0x1b50d9d66a4dc3bdda3853679faed7e34e2e1f480bcb0a65b9034452f25376ee"
+    }
+  },
+  {
+    "id": "0x1b50d9d66a4dc3bdda3853679faed7e34e2e1f480bcb0a65b9034452f25376ee-45",
+    "timestamp": "1791557655",
+    "sender": "0x82B2154be998895317FFe02f25F2Da3B40B2F14a",
+    "origin": "0x82B2154be998895317FFe02f25F2Da3B40B2F14a",
+    "pool": {
+      "id": "0x417bab8ab2bc44e523bf24e3bf46694c0b043c7fbcf1fe306bc09bc78fc16bb7"
+    },
+    "token0": {
+      "id": "0xa0Cf27f53636529c227845ce16b49AB759dD8cd0",
+      "symbol": "BAL",
+      "name": "Balary",
+      "decimals": 18,
+      "derivedUSDC": "0.1"
+    },
+    "token1": {
+      "id": "0xD88cA23473DF0fAf9FCDE8d6880f4c8b88df69A5",
+      "symbol": "USDC",
+      "name": "USD Coin",
+      "decimals": 6,
+      "derivedUSDC": "1"
+    },
+    "amount0": "100.0000",
+    "amount1": "9.89",
+    "amountUSD": "10.00",
+    "feeUSD": "0.0300",
+    "sqrtPriceX96": "24861555990479182240136",
+    "tick": "-299506",
+    "transaction": {
+      "id": "0x1b50d9d66a4dc3bdda3853679faed7e34e2e1f480bcb0a65b9034452f25376ee"
+    }
+  },
+  {
+    "id": "0x1b50d9d66a4dc3bdda3853679faed7e34e2e1f480bcb0a65b9034452f25376ee-40",
+    "timestamp": "1791557655",
+    "sender": "0x82B2154be998895317FFe02f25F2Da3B40B2F14a",
+    "origin": "0x82B2154be998895317FFe02f25F2Da3B40B2F14a",
+    "pool": {
+      "id": "0x906c0cb501b42095aab034a48564172de052c6290f19f8a1b8b295260812fa38"
+    },
+    "token0": {
+      "id": "0x63647642133bBdF0461bcf7BF6c360e1969B1194",
+      "symbol": "WLTC",
+      "name": "Wrapped Litecoin",
+      "decimals": 18,
+      "derivedUSDC": "100"
+    },
+    "token1": {
+      "id": "0xa0Cf27f53636529c227845ce16b49AB759dD8cd0",
+      "symbol": "BAL",
+      "name": "Balary",
+      "decimals": 18,
+      "derivedUSDC": "0.1"
+    },
+    "amount0": "0.2000",
+    "amount1": "196.36",
+    "amountUSD": "20.00",
+    "feeUSD": "0.0600",
+    "sqrtPriceX96": "2467185149515005269016011762188",
+    "tick": "68773",
+    "transaction": {
+      "id": "0x1b50d9d66a4dc3bdda3853679faed7e34e2e1f480bcb0a65b9034452f25376ee"
+    }
+  },
+  {
+    "id": "0x1b50d9d66a4dc3bdda3853679faed7e34e2e1f480bcb0a65b9034452f25376ee-37",
+    "timestamp": "1791557655",
+    "sender": "0x82B2154be998895317FFe02f25F2Da3B40B2F14a",
+    "origin": "0x82B2154be998895317FFe02f25F2Da3B40B2F14a",
+    "pool": {
+      "id": "0xff04100268bc6eab603d8971cd785cffe6cdae1d6552e5ffeae2197e1b40a888"
+    },
+    "token0": {
+      "id": "0x63647642133bBdF0461bcf7BF6c360e1969B1194",
+      "symbol": "WLTC",
+      "name": "Wrapped Litecoin",
+      "decimals": 18,
+      "derivedUSDC": "100"
+    },
+    "token1": {
+      "id": "0xD88cA23473DF0fAf9FCDE8d6880f4c8b88df69A5",
+      "symbol": "USDC",
+      "name": "USD Coin",
+      "decimals": 6,
+      "derivedUSDC": "1"
+    },
+    "amount0": "0.5000",
+    "amount1": "47.99",
+    "amountUSD": "50.00",
+    "feeUSD": "0.1500",
+    "sqrtPriceX96": "762739448460941808603962",
+    "tick": "-231031",
+    "transaction": {
+      "id": "0x1b50d9d66a4dc3bdda3853679faed7e34e2e1f480bcb0a65b9034452f25376ee"
+    }
+  }
+]

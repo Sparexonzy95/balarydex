@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <!-- Background Gradient: Litecoin Deep Cobalt to Navy -->
+    <linearGradient id="wltc-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#345D9D" />
+      <stop offset="50%" stop-color="#244577" />
+      <stop offset="100%" stop-color="#152B4D" />
+    </linearGradient>
+
+    <!-- Wrapped Cyan Accent Glow -->
+    <linearGradient id="wltc-glow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38BDF8" stop-opacity="0.8" />
+      <stop offset="100%" stop-color="#0284C7" stop-opacity="0.3" />
+    </linearGradient>
+
+    <!-- Metallic Glyph Gradient -->
+    <linearGradient id="wltc-glyph" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="60%" stop-color="#F1F5F9" />
+      <stop offset="100%" stop-color="#CBD5E1" />
+    </linearGradient>
+
+    <!-- Drop Shadow Filter -->
+    <filter id="wltc-shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="3" stdDeviation="3.5" flood-color="#000000" flood-opacity="0.45" />
+    </filter>
+  </defs>
+
+  <!-- Outer Wrapped Ring -->
+  <circle cx="64" cy="64" r="61" fill="none" stroke="url(#wltc-glow)" stroke-width="2" stroke-dasharray="8 4" opacity="0.75" />
+
+  <!-- Base Coin Body -->
+  <circle cx="64" cy="64" r="56" fill="url(#wltc-bg)" stroke="#38BDF8" stroke-width="1.5" stroke-opacity="0.4" />
+
+  <!-- Inner Soft Inset Ring -->
+  <circle cx="64" cy="64" r="52" fill="none" stroke="#FFFFFF" stroke-width="1" stroke-opacity="0.1" />
+
+  <!-- Official Litecoin Ł Glyph -->
+  <g filter="url(#wltc-shadow)">
+    <path 
+      fill="url(#wltc-glyph)" 
+      d="M57.6,26 L69.4,26 L64.7,51.6 L80.6,45.9 L77.8,55.5 L62.8,60.8 L56,97.2 L92.8,97.2 L91,106 L42.4,106 L50.5,65.2 L36,70.4 L38.8,60.8 L52.4,55.8 Z" 
+    />
+  </g>
+
+  <!-- Tiny Wrapped Badge in Top-Right -->
+  <g transform="translate(86, 14)">
+    <circle cx="12" cy="12" r="11" fill="#0F172A" stroke="#38BDF8" stroke-width="1.5" />
+    <text x="12" y="16" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="800" fill="#38BDF8" text-anchor="middle">W</text>
+  </g>
+</svg>

@@ -1,0 +1,20 @@
+{
+  "poolManagers": [
+    {
+      "id": "0xA46Fb600d828E3D6aA91581Ca4D4956E9D5c7aba",
+      "poolCount": "6",
+      "txCount": "5",
+      "totalVolumeUSD": "110.00",
+      "totalFeesUSD": "0.33",
+      "totalValueLockedUSD": "2357163.72",
+      "owner": "0x0EdBC6F8506e72478CE78a4AE934C7b21cb7050A"
+    }
+  ],
+  "uniswapDayDatas": [
+    {
+      "date": 1791504000,
+      "volumeUSD": "110.00",
+      "feesUSD": "0.33"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  indexer:
+    build: .
+    container_name: balary-indexer
+    restart: always
+    ports:
+      - "3102:3102"
+    volumes:
+      - ./storage:/app/storage
+    environment:
+      - NODE_ENV=production
+      - BACKEND_PORT=3102
+      - BACKEND_HOST=0.0.0.0
+      - STORAGE_DIR=/app/storage
+      - LITEFORGE_RPC_URL=https://liteforge.rpc.caldera.xyz/http

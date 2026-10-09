@@ -1,0 +1,92 @@
+[
+  {
+    "id": "0",
+    "active": true,
+    "address": "0x7267CD4fF7f0e9Ba3bf1Ec8f1b8A7D14b16C4040",
+    "name": "LitVM Points Season 1",
+    "tagline": "Official Protocol Incentive Program",
+    "description": "Swap & Accumulate LitVM Points.\n\nEvery swap you make in any incentivised campaign pool earns you Points proportional to your trade size! Points are unique per pool and are minted directly into your wallet as collectible ERC-1155 tokens on LitVM. Trade actively to boost your rank on the leaderboard and qualify for upcoming ecosystem reward airdrops.",
+    "rewardType": "ERC-1155 Tokens",
+    "rewardRate": "1% of Swap Volume in PTS",
+    "distribution": "Instant On-Chain Mint",
+    "poolKeys": [
+      {
+        "currency0": "0x63647642133bBdF0461bcf7BF6c360e1969B1194",
+        "currency1": "0xa0Cf27f53636529c227845ce16b49AB759dD8cd0",
+        "fee": 3000,
+        "tickSpacing": 60,
+        "hooks": "0x7267CD4fF7f0e9Ba3bf1Ec8f1b8A7D14b16C4040"
+      },
+      {
+        "currency0": "0xa0Cf27f53636529c227845ce16b49AB759dD8cd0",
+        "currency1": "0xD88cA23473DF0fAf9FCDE8d6880f4c8b88df69A5",
+        "fee": 3000,
+        "tickSpacing": 60,
+        "hooks": "0x7267CD4fF7f0e9Ba3bf1Ec8f1b8A7D14b16C4040"
+      }
+    ],
+    "createdAt": 1791556898,
+    "durationDays": 14,
+    "endsAt": 1792766498
+  },
+  {
+    "id": "1",
+    "active": true,
+    "address": "0x7267CD4fF7f0e9Ba3bf1Ec8f1b8A7D14b16C4040",
+    "name": "SoftDAO Ecosystem Sprint",
+    "tagline": "Community Incentive Campaign",
+    "description": "Trade SOFT / USDC pairs on Balary DEX to accumulate native SoftDAO points and governance allocations on LitVM.",
+    "rewardType": "ERC-1155 Tokens",
+    "rewardRate": "1% of Swap Volume in PTS",
+    "distribution": "Instant On-Chain Mint",
+    "poolKeys": [
+      {
+        "currency0": "0x6841fdF52E3398DC43cDb042292B0ECb53FA8737",
+        "currency1": "0xD88cA23473DF0fAf9FCDE8d6880f4c8b88df69A5",
+        "fee": 3000,
+        "tickSpacing": 60,
+        "hooks": "0x7267CD4fF7f0e9Ba3bf1Ec8f1b8A7D14b16C4040"
+      }
+    ],
+    "createdAt": 1791556898,
+    "durationDays": 7,
+    "endsAt": 1792161698
+  },
+  {
+    "id": "2",
+    "active": true,
+    "address": "0x7267CD4fF7f0e9Ba3bf1Ec8f1b8A7D14b16C4040",
+    "name": "Balary Genesis Trading League",
+    "tagline": "Genesis Season Competition",
+    "description": "Celebrate the launch of Balary DEX on LitVM LiteForge Testnet! Boost trading volume across core liquidity pairs to maximize your season rank.",
+    "rewardType": "ERC-1155 Tokens",
+    "rewardRate": "1% of Swap Volume in PTS",
+    "distribution": "Instant On-Chain Mint",
+    "poolKeys": [
+      {
+        "currency0": "0x63647642133bBdF0461bcf7BF6c360e1969B1194",
+        "currency1": "0xa0Cf27f53636529c227845ce16b49AB759dD8cd0",
+        "fee": 3000,
+        "tickSpacing": 60,
+        "hooks": "0x7267CD4fF7f0e9Ba3bf1Ec8f1b8A7D14b16C4040"
+      },
+      {
+        "currency0": "0xa0Cf27f53636529c227845ce16b49AB759dD8cd0",
+        "currency1": "0xD88cA23473DF0fAf9FCDE8d6880f4c8b88df69A5",
+        "fee": 3000,
+        "tickSpacing": 60,
+        "hooks": "0x7267CD4fF7f0e9Ba3bf1Ec8f1b8A7D14b16C4040"
+      },
+      {
+        "currency0": "0x6841fdF52E3398DC43cDb042292B0ECb53FA8737",
+        "currency1": "0xD88cA23473DF0fAf9FCDE8d6880f4c8b88df69A5",
+        "fee": 3000,
+        "tickSpacing": 60,
+        "hooks": "0x7267CD4fF7f0e9Ba3bf1Ec8f1b8A7D14b16C4040"
+      }
+    ],
+    "createdAt": 1791556898,
+    "durationDays": 30,
+    "endsAt": 1794148898
+  }
+]

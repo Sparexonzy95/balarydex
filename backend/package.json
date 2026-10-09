@@ -1,0 +1,12 @@
+{
+  "name": "balary-indexer",
+  "version": "1.0.0",
+  "description": "Balary DEX Blockchain Indexer & REST API Daemon for LitVM",
+  "main": "indexer.cjs",
+  "scripts": {
+    "start": "node indexer.cjs"
+  },
+  "dependencies": {
+    "viem": "^2.49.2"
+  }
+}

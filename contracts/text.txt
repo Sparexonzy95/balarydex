@@ -1,0 +1,41 @@
+minHopPriceX36 is a new slippage protection parameter added to the Uniswap V4 Router's swap structs (ExactInputSingleParams, ExactInputParams, etc.).
+
+What does it do? Normally, slippage is checked at the very end of a swap using amountOutMinimum. However, in a multi-hop swap (e.g. Token A -> Token B -> Token C), an attacker could sandwich a middle hop where liquidity is thin, extracting value while still satisfying your final amountOutMinimum.
+
+minHopPriceX36 allows you to enforce a minimum acceptable exchange rate/price on a per-hop basis. If the exchange rate (Amount Out / Amount In) for that specific hop drops below this minimum, the router will immediately revert the transaction with a V4TooLittleReceivedPerHopSingle error.
+
+What does the "X36" mean? The "X36" indicates that the price is scaled up by 1e36 (10^36) to prevent rounding errors in Solidity.
+
+For example: If you swap 1 TokenA for 2000 TokenB, the exchange rate is 2000. To set your minimum acceptable price to 1900, you would pass minHopPriceX36: 1900 * 1e36.
+
+Why did your test break? I noticed you just commented out //minHopPriceX36: 0, in test/ForkSwapTest.sol. This will break the test compilation again because the IV4Router.ExactInputSingleParams struct requires that field to be provided.
+
+By passing minHopPriceX36: 0, you are effectively disabling this specific per-hop check, which is the recommended approach for local testing unless you're explicitly writing a test to verify MEV/sandwich attack protections. You should uncomment that line for the file to compile again!
+
+7:16 PM
+so i can use 0 or just use this, minHopPriceX36 = amountOutMinimum * 1e36.
+
+
+
+
+
+
+
+Yes, you can absolutely just use 0! Using 0 simply disables the per-hop check and relies entirely on your amountOutMinimum for slippage protection, which is perfectly fine and standard for most integrations.
+
+If you do want to calculate and provide it dynamically based on your amountOutMinimum, your logic is very close, but you need to divide by amountIn to get the actual exchange rate.
+
+Based on how the Uniswap V4 Router calculates it under the hood:
+
+solidity
+// Router calculation:
+uint256 priceX36 = uint256(amountOut) * 1e36 / amountIn;
+You would calculate your minHopPriceX36 like this:
+
+solidity
+minHopPriceX36: (uint256(amountOutMinimum) * 1e36) / amountIn
+Summary:
+
+For tests/simple integrations: Just use 0. It's easiest and you are already protected by amountOutMinimum.
+For strict on-chain integrations: Use (uint256(amountOutMinimum) * 1e36) / amountIn (for a single-hop swap).
+7:25 PM
