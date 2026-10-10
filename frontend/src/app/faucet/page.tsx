@@ -207,13 +207,8 @@ export default function FaucetPage() {
     return `${mins}m ${secs < 10 ? '0' : ''}${secs}s`;
   };
 
-  const formatCooldownBadge = (seconds: number) => {
-    if (seconds >= 3600) {
-      const hours = Math.round(seconds / 3600);
-      return `${hours} Hour${hours > 1 ? 's' : ''}`;
-    }
-    const mins = Math.round(seconds / 60);
-    return `${mins} Minute${mins > 1 ? 's' : ''}`;
+  const formatCooldownBadge = () => {
+    return '24 Hours';
   };
 
   return (
@@ -236,48 +231,17 @@ export default function FaucetPage() {
       <div className="absolute bottom-40 left-10 w-[350px] h-[350px] bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
 
       {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-10">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
         <div>
-          <div className="flex items-center gap-3 mb-3">
-            <span className="p-2 rounded-xl bg-primary/10 border border-primary/20 text-primary">
-              <Droplets size={22} />
-            </span>
-            <span className="text-[11px] font-mono uppercase tracking-[0.2em] text-primary font-semibold">
-              LitVM LiteForge Testnet (4441)
-            </span>
+          <div className="section-tag mb-1.5">
+            [ Testnet Faucet ]
           </div>
-          <h1 className="text-3xl md:text-4xl font-semibold text-white tracking-tight">
-            Testnet Token Faucet
+          <h1 className="text-2xl sm:text-3xl font-semibold text-white tracking-tight">
+            Claim Test Tokens
           </h1>
-          <p className="text-sm text-white/50 mt-2 max-w-xl">
-            Claim free test tokens (BAL, USDC, WLTC, SOFT, MONKE) to create liquidity pools, provide liquidity, and test swaps on Balary.
+          <p className="text-sm text-ash mt-1 max-w-xl">
+            Claim free tokens (BAL, USDC, WLTC, SOFT, MONKE) to add liquidity and execute swaps.
           </p>
-        </div>
-
-        {/* Faucet Address Pill */}
-        <div className="bg-white/[0.03] border border-white/10 px-4 py-2.5 rounded-2xl flex items-center gap-3">
-          <div className="flex flex-col">
-            <span className="text-[9px] uppercase tracking-widest text-white/30">Faucet Contract</span>
-            <span className="text-xs font-mono text-white/80">
-              {FAUCET_ADDRESS.slice(0, 6)}...{FAUCET_ADDRESS.slice(-4)}
-            </span>
-          </div>
-          <button
-            onClick={copyFaucetAddress}
-            className="p-1.5 rounded-lg hover:bg-white/10 text-white/40 hover:text-white transition-colors cursor-pointer"
-            title="Copy Faucet Contract"
-          >
-            {copied ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
-          </button>
-          <a
-            href={`https://liteforge.explorer.caldera.xyz/address/${FAUCET_ADDRESS}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="p-1.5 rounded-lg hover:bg-white/10 text-white/40 hover:text-primary transition-colors"
-            title="View Contract on Explorer"
-          >
-            <ExternalLink size={14} />
-          </a>
         </div>
       </div>
 
@@ -298,7 +262,7 @@ export default function FaucetPage() {
             <Clock size={14} />
             <span>Cooldown:</span>
             <span className="font-mono text-white bg-[#181818] border border-[color:var(--border-subtle)] px-2.5 py-0.5 rounded-[4px]">
-              {formatCooldownBadge(cooldownSeconds || 86400)}
+              {formatCooldownBadge()}
             </span>
           </div>
         </div>
@@ -364,41 +328,41 @@ export default function FaucetPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Link
             to="/pools/create"
-            className="group bg-white/[0.02] border border-white/5 hover:border-primary/40 rounded-2xl p-6 transition-all flex flex-col justify-between"
+            className="group rounded-[6px] border border-[color:var(--border-subtle)] bg-[#121212] hover:border-[color:var(--border-default)] p-5 transition-colors flex flex-col justify-between"
           >
             <div>
-              <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 text-primary flex items-center justify-center mb-4">
-                <Layers size={18} />
+              <div className="w-9 h-9 rounded-[4px] bg-white/[0.05] border border-white/10 text-white flex items-center justify-center mb-3">
+                <Layers size={17} />
               </div>
-              <h4 className="text-base font-semibold text-white group-hover:text-primary transition-colors">
+              <h4 className="text-[14px] font-medium text-white group-hover:text-bone transition-colors">
                 1. Create a Liquidity Pool
               </h4>
-              <p className="text-xs text-white/40 mt-2 leading-relaxed">
-                Use your newly claimed tokens (or import a custom ERC-20) to initialize a new Uniswap v4 pool on LitVM.
+              <p className="text-[12px] text-ash mt-1.5 leading-relaxed">
+                Use your tokens to initialize a new pool with customized fee tiers and hooks on Balary.
               </p>
             </div>
-            <div className="mt-6 flex items-center gap-2 text-xs font-semibold text-primary uppercase tracking-wider">
-              Create Pool <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+            <div className="mt-5 flex items-center gap-1.5 text-[12px] font-medium text-white/80">
+              Create Pool <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
             </div>
           </Link>
 
           <Link
             to="/pools"
-            className="group bg-white/[0.02] border border-white/5 hover:border-primary/40 rounded-2xl p-6 transition-all flex flex-col justify-between"
+            className="group rounded-[6px] border border-[color:var(--border-subtle)] bg-[#121212] hover:border-[color:var(--border-default)] p-5 transition-colors flex flex-col justify-between"
           >
             <div>
-              <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 text-primary flex items-center justify-center mb-4">
-                <Coins size={18} />
+              <div className="w-9 h-9 rounded-[4px] bg-white/[0.05] border border-white/10 text-white flex items-center justify-center mb-3">
+                <Coins size={17} />
               </div>
-              <h4 className="text-base font-semibold text-white group-hover:text-primary transition-colors">
+              <h4 className="text-[14px] font-medium text-white group-hover:text-bone transition-colors">
                 2. Provide Liquidity
               </h4>
-              <p className="text-xs text-white/40 mt-2 leading-relaxed">
-                Deposit tokens into active pools (like WLTC/SOFT or WLTC/BAL) to earn trading fees on every swap.
+              <p className="text-[12px] text-ash mt-1.5 leading-relaxed">
+                Deposit tokens into active pools (like WLTC/BAL or BAL/USDC) to earn fees and points.
               </p>
             </div>
-            <div className="mt-6 flex items-center gap-2 text-xs font-semibold text-primary uppercase tracking-wider">
-              Explore Pools <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+            <div className="mt-5 flex items-center gap-1.5 text-[12px] font-medium text-white/80">
+              Explore Pools <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
             </div>
           </Link>
 
@@ -411,10 +375,10 @@ export default function FaucetPage() {
                 <ArrowLeftRight size={17} />
               </div>
               <h4 className="text-[14px] font-medium text-white group-hover:text-bone transition-colors">
-                3. Test Instant Swaps
+                3. Instant Swaps
               </h4>
               <p className="text-[12px] text-ash mt-1.5 leading-relaxed">
-                Swap between BAL, USDC, WLTC, SOFT, and MONKE with low fees and live price execution on LitVM.
+                Swap between BAL, USDC, WLTC, SOFT, and MONKE with instant execution and zero price slippage.
               </p>
             </div>
             <div className="mt-5 flex items-center gap-1.5 text-[12px] font-medium text-white/80">

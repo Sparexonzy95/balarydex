@@ -71,7 +71,9 @@ function MainLayout() {
           }
         />
       </Routes>
-      <Footer />
+      <div className={isLanding ? 'block' : 'hidden md:block'}>
+        <Footer />
+      </div>
       {!isLanding && <MobileBottomNav />}
     </div>
   );

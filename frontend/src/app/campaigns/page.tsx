@@ -53,46 +53,24 @@ function formatCampaignStatus(campaign: any): { isEnded: boolean; badgeText: str
 }
 
 function PoolPill({ pk }: { pk: PoolKey }) {
-  const navigate = useNavigate();
   const t0 = getToken(pk.currency0);
   const t1 = getToken(pk.currency1);
-  const poolId = computePoolId(pk);
 
   return (
-    <div className="flex items-center justify-between w-full bg-[#181818] hover:bg-[#1e1e1e] border border-[color:var(--border-subtle)] rounded-[6px] px-3 py-2 transition-colors">
-      <div className="flex items-center gap-2">
-        <div className="flex -space-x-1.5">
-          {[t0, t1].map((tk, i) => (
-            <div key={i} className="w-5 h-5 rounded-full border border-black bg-black overflow-hidden shadow-sm">
-              {tk?.logo
-                ? <img src={tk.logo} alt={tk.symbol} className="w-full h-full object-contain" />
-                : <div className="w-full h-full bg-white/20" />}
-            </div>
-          ))}
-        </div>
-        <span className="text-[13px] text-white font-medium">
-          {t0?.symbol ?? '??'}/{t1?.symbol ?? '??'}
-        </span>
-        <span className="text-[11px] text-ash/40">·</span>
-        <span className="text-[11px] text-ash font-mono">{(pk.fee / 10000).toFixed(2)}%</span>
+    <div className="inline-flex items-center gap-1.5 bg-[#181818] border border-[color:var(--border-subtle)] rounded-[4px] px-2 py-1 text-[11px] text-bone font-mono">
+      <div className="flex -space-x-1 shrink-0">
+        {[t0, t1].map((tk, i) => (
+          <div key={i} className="w-3.5 h-3.5 rounded-full border border-black bg-black overflow-hidden flex items-center justify-center">
+            {tk?.logo ? (
+              <img src={tk.logo} alt={tk.symbol} className="w-full h-full object-contain" />
+            ) : (
+              <div className="w-full h-full bg-white/20" />
+            )}
+          </div>
+        ))}
       </div>
-
-      <div className="flex items-center gap-2">
-        <span className="text-[10px] uppercase tracking-wider font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-[3px] border border-emerald-500/20">
-          +Points
-        </span>
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            navigate(`/swap?from=${t0?.address}&to=${t1?.address}&poolId=${poolId}`);
-          }}
-          className="ui-button ui-button-secondary !min-h-6 !px-2 rounded-[4px] text-[11px]"
-        >
-          <ArrowLeftRight size={10} />
-          Swap
-        </button>
-      </div>
+      <span>{t0?.symbol ?? '??'}/{t1?.symbol ?? '??'}</span>
+      <span className="text-ash/60 text-[10px]">{(pk.fee / 10000).toFixed(2)}%</span>
     </div>
   );
 }
@@ -100,7 +78,7 @@ function PoolPill({ pk }: { pk: PoolKey }) {
 export default function CampaignsPage() {
   const [campaignList, setCampaignList] = useState<any[]>(campaigns || []);
   const [page, setPage] = useState(1);
-  const CAMPAIGNS_PER_PAGE = 2;
+  const CAMPAIGNS_PER_PAGE = 3;
 
   const [stats, setStats] = useState<{
     totalParticipants: number;
@@ -148,65 +126,65 @@ export default function CampaignsPage() {
   const paginatedCampaigns = campaignList.slice((page - 1) * CAMPAIGNS_PER_PAGE, page * CAMPAIGNS_PER_PAGE);
 
   return (
-    <div className="pb-32 sm:pb-40 relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6">
+    <div className="pb-32 sm:pb-40 relative z-10 w-full max-w-4xl mx-auto px-3 sm:px-6">
       {/* Header */}
-      <header className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <header className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <div className="section-tag mb-1.5">
+          <div className="section-tag mb-1">
             [ Reward Campaigns ]
           </div>
-          <h1 className="type-h2 font-display text-white">Trading Campaigns</h1>
-          <p className="text-ash text-[13px] mt-1">
+          <h1 className="text-2xl sm:text-3xl font-medium text-white tracking-tight">Trading Campaigns</h1>
+          <p className="text-ash text-[12px] sm:text-[13px] mt-0.5">
             Swap in eligible pools to earn on-chain points and climb the reward leaderboard.
           </p>
         </div>
 
         <Link
           to="/campaigns/create"
-          className="ui-button ui-button-primary !min-h-9 !px-4 text-[13px] self-start sm:self-auto inline-flex items-center gap-1.5"
+          className="ui-button ui-button-primary !min-h-8 !px-3.5 text-[12px] self-start sm:self-auto inline-flex items-center gap-1.5"
         >
-          <Plus size={14} />
+          <Plus size={13} />
           <span>Create Campaign</span>
         </Link>
       </header>
 
-      {/* Compact Stat Strip */}
-      <div className="grid grid-cols-3 gap-3 mb-8">
-        <div className="rounded-[6px] border border-[color:var(--border-subtle)] bg-[#121212] p-3.5 flex flex-col gap-0.5">
-          <span className="text-[10px] uppercase tracking-wider text-ash font-medium flex items-center gap-1.5">
-            <Trophy size={12} className="text-white" /> Active Campaigns
+      {/* Responsive Stat Strip */}
+      <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-6">
+        <div className="rounded-[6px] border border-[color:var(--border-subtle)] bg-[#121212] p-2.5 sm:p-3.5 flex flex-col gap-0.5">
+          <span className="text-[9px] sm:text-[10px] uppercase tracking-wider text-ash font-medium flex items-center gap-1">
+            <Trophy size={11} className="text-white" /> Active
           </span>
-          <span className="text-lg md:text-xl font-medium font-financial text-white mt-0.5">
+          <span className="text-base sm:text-xl font-medium font-mono text-white">
             {stats.activeCampaigns}
           </span>
         </div>
 
-        <div className="rounded-[6px] border border-[color:var(--border-subtle)] bg-[#121212] p-3.5 flex flex-col gap-0.5">
-          <span className="text-[10px] uppercase tracking-wider text-ash font-medium flex items-center gap-1.5">
-            <Award size={12} className="text-white" /> Points Minted
+        <div className="rounded-[6px] border border-[color:var(--border-subtle)] bg-[#121212] p-2.5 sm:p-3.5 flex flex-col gap-0.5">
+          <span className="text-[9px] sm:text-[10px] uppercase tracking-wider text-ash font-medium flex items-center gap-1">
+            <Award size={11} className="text-white" /> Points
           </span>
-          <span className="text-lg md:text-xl font-medium font-financial text-white mt-0.5">
-            {stats.totalPointsDistributed} <span className="text-xs text-ash font-sans">PTS</span>
+          <span className="text-base sm:text-xl font-medium font-mono text-white truncate">
+            {stats.totalPointsDistributed}
           </span>
         </div>
 
-        <div className="rounded-[6px] border border-[color:var(--border-subtle)] bg-[#121212] p-3.5 flex flex-col gap-0.5">
-          <span className="text-[10px] uppercase tracking-wider text-ash font-medium flex items-center gap-1.5">
-            <Layers size={12} className="text-white" /> Swappers
+        <div className="rounded-[6px] border border-[color:var(--border-subtle)] bg-[#121212] p-2.5 sm:p-3.5 flex flex-col gap-0.5">
+          <span className="text-[9px] sm:text-[10px] uppercase tracking-wider text-ash font-medium flex items-center gap-1">
+            <Layers size={11} className="text-white" /> Swappers
           </span>
-          <span className="text-lg md:text-xl font-medium font-financial text-white mt-0.5">
-            {stats.totalParticipants} <span className="text-xs text-ash font-sans">users</span>
+          <span className="text-base sm:text-xl font-medium font-mono text-white">
+            {stats.totalParticipants}
           </span>
         </div>
       </div>
 
-      {/* Campaigns List (Paginated to 2 per page) */}
+      {/* Campaigns List */}
       {campaignList.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-24 text-white/30 text-xs uppercase tracking-widest">
+        <div className="flex flex-col items-center justify-center py-20 text-white/30 text-xs uppercase tracking-widest border border-dashed border-white/10 rounded-[6px]">
           No campaigns found
         </div>
       ) : (
-        <div className="flex flex-col gap-6 mb-8">
+        <div className="flex flex-col gap-4 mb-6">
           {paginatedCampaigns.map((c: any, index: number) => {
             const campId = c.id !== undefined ? String(c.id) : String((page - 1) * CAMPAIGNS_PER_PAGE + index);
             const status = formatCampaignStatus(c);
@@ -214,101 +192,67 @@ export default function CampaignsPage() {
             return (
               <div 
                 key={campId} 
-                className="rounded-[8px] border border-[color:var(--border-default)] bg-[#121212] overflow-hidden"
+                className="rounded-[8px] border border-[color:var(--border-default)] bg-[#121212] p-4 sm:p-5 flex flex-col gap-3.5 hover:border-[color:var(--border-hover)] transition-colors"
               >
-                <div className="p-6 md:p-7 flex flex-col md:grid md:grid-cols-[1fr_360px] gap-6">
-                  {/* Left Column: Info & Description */}
-                  <div className="flex flex-col justify-between gap-5">
+                {/* Title + Status Badge */}
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-[6px] bg-white/[0.05] border border-white/10 flex items-center justify-center shrink-0">
+                      <Trophy size={15} className="text-white" />
+                    </div>
                     <div>
-                      {/* Title + Status Badge */}
-                      <div className="flex items-start justify-between gap-3 mb-2">
-                        <div className="flex items-center gap-3">
-                          <div className="w-9 h-9 rounded-[6px] bg-white/[0.05] border border-white/10 flex items-center justify-center shrink-0">
-                            <Trophy size={18} className="text-white" />
-                          </div>
-                          <div>
-                            <h2 className="text-white font-medium text-[18px]">{c.name}</h2>
-                            <p className="text-ash text-[11px] font-mono mt-0.5">
-                              {c.tagline ? `${c.tagline} · ` : ''}{c.rewardType}
-                            </p>
-                          </div>
-                        </div>
-
-                        <span className={`shrink-0 flex items-center gap-1.5 px-2.5 py-1 rounded-[4px] text-[10px] uppercase tracking-wider font-mono border ${
-                          !status.isEnded
-                            ? 'bg-emerald-500/10 border-emerald-500/25 text-emerald-400'
-                            : 'bg-red-500/10 border-red-500/20 text-red-400'
-                        }`}>
-                          {!status.isEnded ? (
-                            <Circle size={6} className="fill-emerald-400 text-emerald-400" />
-                          ) : (
-                            <Clock size={10} />
-                          )}
-                          {status.badgeText}
-                        </span>
-                      </div>
-
-                      {/* Description */}
-                      <p className="text-ash text-[13px] leading-relaxed line-clamp-2 mt-2">
-                        {c.description ? c.description.split('\n\n')[0] : 'Swap in designated pools to earn rewards and climb the leaderboard.'}
+                      <h2 className="text-white font-medium text-[15px] sm:text-[16px] leading-tight">{c.name}</h2>
+                      <p className="text-ash text-[11px] font-mono">
+                        {c.tagline || c.rewardType || 'ERC-1155 Points'}
                       </p>
-
-                      {/* Reward Meta */}
-                      <div className="grid grid-cols-2 gap-3 mt-4">
-                        <div className="p-2.5 rounded-[4px] bg-[#161616] border border-[color:var(--border-subtle)]">
-                          <p className="text-[10px] uppercase tracking-wider text-ash font-medium">Reward Rate</p>
-                          <p className="text-[12px] font-mono text-bone mt-0.5">
-                            {c.rewardRate || '1% Volume in PTS'}
-                          </p>
-                        </div>
-                        <div className="p-2.5 rounded-[4px] bg-[#161616] border border-[color:var(--border-subtle)]">
-                          <p className="text-[10px] uppercase tracking-wider text-ash font-medium">Distribution</p>
-                          <p className="text-[12px] font-mono text-emerald-400 mt-0.5">
-                            {c.distribution || 'Instant On-Chain Mint'}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* View Leaderboard CTA */}
-                    <div className="pt-2">
-                      <Link
-                        to={`/campaigns/${campId}`}
-                        state={{ campaign: c }}
-                        className="ui-button ui-button-primary !min-h-9 !px-4 text-[12px] inline-flex items-center gap-1.5"
-                      >
-                        <span>View Leaderboard</span>
-                        <ArrowRight size={13} />
-                      </Link>
                     </div>
                   </div>
 
-                  {/* Right Column: Included Pools */}
-                  <div className="flex flex-col justify-between bg-[#161616] border border-[color:var(--border-subtle)] rounded-[6px] p-4">
-                    <div className="space-y-2.5">
-                      <div className="flex items-center justify-between pb-2 border-b border-white/[0.06]">
-                        <span className="text-[11px] uppercase tracking-wider text-ash font-medium">
-                          Eligible Pools ({(c.poolKeys || []).length})
-                        </span>
-                        <span className="text-[10px] text-emerald-400 font-mono">Rewards Active</span>
-                      </div>
+                  <span className={`shrink-0 flex items-center gap-1.5 px-2 py-0.5 rounded-[4px] text-[10px] uppercase tracking-wider font-mono border ${
+                    !status.isEnded
+                      ? 'bg-emerald-500/10 border-emerald-500/25 text-emerald-400'
+                      : 'bg-red-500/10 border-red-500/20 text-red-400'
+                  }`}>
+                    {!status.isEnded ? (
+                      <Circle size={5} className="fill-emerald-400 text-emerald-400" />
+                    ) : (
+                      <Clock size={9} />
+                    )}
+                    {status.badgeText}
+                  </span>
+                </div>
 
-                      <div className="flex flex-col gap-2 max-h-48 overflow-y-auto pr-1">
-                        {(c.poolKeys || []).length === 0 ? (
-                          <div className="py-6 text-center text-xs text-ash/40">No pools linked yet</div>
-                        ) : (
-                          (c.poolKeys || []).map((pk: any, pi: number) => (
-                            <PoolPill key={pi} pk={pk} />
-                          ))
-                        )}
-                      </div>
-                    </div>
+                {/* Description */}
+                <p className="text-ash text-[12px] leading-relaxed line-clamp-2">
+                  {c.description ? c.description.split('\n\n')[0] : 'Swap in eligible pools to earn on-chain points.'}
+                </p>
 
-                    <div className="pt-3 border-t border-white/[0.06] flex items-center justify-between text-[11px] text-ash">
-                      <span>Network</span>
-                      <span className="font-mono text-white/80">LitVM Testnet</span>
-                    </div>
+                {/* Eligible Pools Chips */}
+                {(c.poolKeys || []).length > 0 && (
+                  <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
+                    <span className="text-[10px] uppercase tracking-wider text-ash/60 font-mono mr-1">Pairs:</span>
+                    {(c.poolKeys || []).map((pk: any, pi: number) => (
+                      <PoolPill key={pi} pk={pk} />
+                    ))}
                   </div>
+                )}
+
+                {/* Footer Strip */}
+                <div className="pt-2.5 border-t border-[color:var(--border-subtle)] flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+                  <div className="flex items-center gap-2 text-[11px] font-mono text-ash">
+                    <span>Rate: <strong className="text-bone font-normal">{c.rewardRate || '1% in Points'}</strong></span>
+                    <span>·</span>
+                    <span className="text-emerald-400">{c.distribution || 'On-Chain Mint'}</span>
+                  </div>
+
+                  <Link
+                    to={`/campaigns/${campId}`}
+                    state={{ campaign: c }}
+                    className="ui-button ui-button-primary !min-h-8 !px-3 text-[12px] self-start sm:self-auto inline-flex items-center gap-1.5"
+                  >
+                    <span>View Leaderboard</span>
+                    <ArrowRight size={12} />
+                  </Link>
                 </div>
               </div>
             );

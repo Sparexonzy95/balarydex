@@ -2,9 +2,8 @@ import { useLocation, useParams, Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { ethers, formatUnits } from 'ethers';
 import {
-  Trophy, Zap, ChevronLeft,
-  Crown, Circle, RefreshCw, Medal, User,
-  ArrowRight, ArrowLeftRight, Droplets, ExternalLink, ShieldCheck, Flame, Sparkles, Clock, X, AlertTriangle
+  Trophy, ChevronLeft, Crown, Circle, RefreshCw, Medal,
+  ExternalLink, Flame, Clock, X, AlertTriangle, Droplets
 } from 'lucide-react';
 import { useAccount, usePublicClient } from 'wagmi';
 import { campaigns, type HookCampaign, type PoolKey } from '../../../config/hooksDetail';
@@ -104,13 +103,6 @@ function LeaderboardPanel({
   const navigate = useNavigate();
   const publicClient = usePublicClient();
   const poolId = useMemo(() => computePoolId(pk), [pk]);
-  const decimalTokenId = useMemo(() => {
-    try {
-      return BigInt(poolId).toString();
-    } catch {
-      return '0';
-    }
-  }, [poolId]);
 
   const t0 = getToken(pk.currency0);
   const t1 = getToken(pk.currency1);
@@ -185,13 +177,14 @@ function LeaderboardPanel({
   }, [rows, connectedAddress, page, userOnChainPoints]);
 
   return (
-    <div className="flex flex-col gap-6">
-      {/* ── Active Pool Banner & Quick Action ── */}
-      <div className="rounded-[6px] border border-white/[0.08] bg-[#121212] p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="flex items-center gap-4">
-          <div className="flex -space-x-2">
+    <div className="flex flex-col gap-4">
+      {/* ── Active Pool & Your Position Bar ── */}
+      <div className="rounded-[8px] border border-white/[0.08] bg-[#121212] p-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        {/* Pool Info */}
+        <div className="flex items-center gap-3">
+          <div className="flex -space-x-1.5 shrink-0">
             {[t0, t1].map((tk, i) => (
-              <div key={i} className="w-9 h-9 rounded-full border border-white/10 bg-black overflow-hidden flex items-center justify-center">
+              <div key={i} className="w-8 h-8 rounded-full border border-black bg-black overflow-hidden flex items-center justify-center">
                 {tk?.logo
                   ? <img src={tk.logo} alt={tk?.symbol} className="w-full h-full object-contain" />
                   : <div className="w-full h-full bg-white/10" />}
@@ -200,122 +193,97 @@ function LeaderboardPanel({
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="text-bone font-medium text-base">
-                {t0?.symbol ?? '??'} / {t1?.symbol ?? '??'} Pool
+              <h3 className="text-white font-medium text-sm">
+                {t0?.symbol ?? '??'} / {t1?.symbol ?? '??'}
               </h3>
-              <span className="text-[11px] font-mono text-ash bg-white/[0.04] border border-white/[0.08] px-2 py-0.5 rounded-[4px]">
+              <span className="text-[10px] font-mono text-ash bg-white/[0.04] border border-white/[0.08] px-1.5 py-0.5 rounded-[4px]">
                 {(pk.fee / 10000).toFixed(2)}%
               </span>
-              <span className="text-[10px] font-mono uppercase tracking-[0.14em] text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-[4px]">
-                Points Active
-              </span>
             </div>
-            <p className="text-ash text-xs mt-0.5">
-              Swap any amount between {t0?.symbol} and {t1?.symbol} to earn instant reward points.
+            <p className="text-ash text-xs">
+              Swap {t0?.symbol} and {t1?.symbol} to earn reward points.
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-2.5">
-          <button
-            onClick={() => navigate(`/swap?from=${t0?.address}&to=${t1?.address}&poolId=${poolId}`)}
-            className="ui-button-primary rounded-[6px] px-4 py-2 text-xs flex items-center gap-2"
-          >
-            <Flame size={13} />
-            <span>Swap & Earn</span>
-          </button>
-          <Link
-            to={`/pools/${poolId}`}
-            className="ui-button-secondary rounded-[6px] px-3.5 py-2 text-xs"
-          >
-            Pool Details ↗
-          </Link>
-        </div>
-      </div>
-
-      {/* ── User Position Banner ── */}
-      {connectedAddress && (
-        <div className="rounded-[6px] bg-[#151515] border border-white/[0.08] p-5">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-[4px] bg-white/[0.05] border border-white/[0.08] flex items-center justify-center text-bone">
-                <User size={16} />
-              </div>
+        {/* User stats + Action buttons */}
+        <div className="flex flex-wrap items-center justify-between md:justify-end gap-3 pt-3 md:pt-0 border-t md:border-t-0 border-white/[0.06]">
+          {connectedAddress && (
+            <div className="flex items-center gap-3 bg-white/[0.03] border border-white/[0.06] rounded-[6px] px-3 py-1.5">
               <div>
-                <div className="flex items-center gap-2">
-                  <span className="text-bone font-medium text-sm">Your Position</span>
-                  <span className="text-[11px] font-mono text-ash bg-white/[0.04] border border-white/[0.08] px-2 py-0.5 rounded-[4px]">
-                    {shortAddr(connectedAddress)}
-                  </span>
-                </div>
-                <p className="text-ash text-xs mt-0.5">
-                  Points are tracked on-chain as ERC-1155 tokens on LitVM.
-                </p>
+                <span className="text-[9px] text-ash font-mono uppercase tracking-wider block">Rank</span>
+                <span className="text-white font-mono font-medium text-xs">#{userRank ?? '1'}</span>
               </div>
-            </div>
-
-            <div className="flex items-center justify-between sm:justify-end gap-4 sm:gap-6 w-full md:w-auto pt-3 md:pt-0 border-t md:border-t-0 border-white/[0.06]">
-              <div className="text-left sm:text-right">
-                <p className="text-[10px] text-ash font-mono uppercase tracking-[0.14em]">Rank</p>
-                <p className="text-bone font-medium font-mono text-base mt-0.5">#{userRank ?? '1'}</p>
+              <div className="h-5 w-[1px] bg-white/[0.08]" />
+              <div>
+                <span className="text-[9px] text-ash font-mono uppercase tracking-wider block">Your Points</span>
+                <span className="text-white font-mono font-medium text-xs">
+                  {formatPoints(userOnChainPoints > 0n ? userOnChainPoints : (userEntry?.balance || 0))} <span className="text-[10px] text-ash">PTS</span>
+                </span>
               </div>
-
-              <div className="text-right">
-                <p className="text-[10px] text-ash font-mono uppercase tracking-[0.14em]">Points</p>
-                <p className="font-mono font-medium text-base text-bone mt-0.5">
-                  {formatPoints(userOnChainPoints > 0n ? userOnChainPoints : (userEntry?.balance || 0))} <span className="text-xs text-ash">PTS</span>
-                </p>
-              </div>
-
               <button
                 onClick={handleRefresh}
                 disabled={isRefreshing}
-                className="p-2 rounded-[4px] border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.05] text-ash hover:text-bone transition-colors cursor-pointer"
+                className="p-1 rounded hover:bg-white/10 text-ash hover:text-white transition-colors cursor-pointer"
                 title="Refresh points balance"
               >
-                <RefreshCw size={14} className={isRefreshing ? 'animate-spin text-bone' : ''} />
+                <RefreshCw size={12} className={isRefreshing ? 'animate-spin text-white' : ''} />
               </button>
             </div>
+          )}
+
+          <div className="flex items-center gap-2 ml-auto md:ml-0">
+            <button
+              onClick={() => navigate(`/swap?from=${t0?.address}&to=${t1?.address}&poolId=${poolId}`)}
+              className="ui-button-primary rounded-[6px] px-3.5 py-1.5 text-xs flex items-center gap-1.5"
+            >
+              <Flame size={13} />
+              <span>Swap & Earn</span>
+            </button>
+            <Link
+              to={`/pools/${poolId}`}
+              className="ui-button-secondary rounded-[6px] px-3 py-1.5 text-xs"
+            >
+              Pool ↗
+            </Link>
           </div>
         </div>
-      )}
+      </div>
 
       {/* ── Leaderboard Table ── */}
-      <div className="rounded-[6px] border border-white/[0.08] overflow-hidden bg-[#121212]">
+      <div className="rounded-[8px] border border-white/[0.08] overflow-hidden bg-[#121212]">
         {/* Sub-header bar */}
-        <div className="px-5 py-3 border-b border-white/[0.06] flex items-center justify-between bg-[#151515]">
+        <div className="px-4 sm:px-5 py-3 border-b border-white/[0.06] flex items-center justify-between bg-[#151515]">
           <div className="flex items-center gap-2">
-            <Trophy size={14} className="text-ash" />
-            <h4 className="text-bone font-medium text-xs tracking-[-0.01em]">Pool Swapper Leaderboard</h4>
+            <Trophy size={14} className="text-white" />
+            <h4 className="text-white font-medium text-xs tracking-tight">Pool Swapper Leaderboard</h4>
           </div>
           <span className="text-[11px] text-ash font-mono">
-            Token ID: {decimalTokenId.slice(0, 10)}…{decimalTokenId.slice(-6)}
+            Top Participants
           </span>
         </div>
 
         {/* Table Header */}
-        <div className="hidden md:grid grid-cols-[60px_1fr_1fr_1fr_110px] gap-4 px-5 py-2.5 text-[11px] font-mono uppercase tracking-[0.14em] text-ash border-b border-white/[0.06] bg-[#151515]/50">
+        <div className="hidden md:grid grid-cols-[50px_1fr_130px_100px] gap-4 px-5 py-2.5 text-[10px] font-mono uppercase tracking-wider text-ash border-b border-white/[0.06] bg-[#151515]/50">
           <div># Rank</div>
           <div>Swapper</div>
           <div className="text-right">Points Earned</div>
           <div className="text-right">Last Activity</div>
-          <div className="text-right">Network</div>
         </div>
 
         {/* Rows */}
         <div className="divide-y divide-white/[0.04]">
           {loading ? (
             Array(5).fill(0).map((_, i) => (
-              <div key={i} className="grid grid-cols-[60px_1fr_1fr_1fr_110px] gap-4 px-5 py-3.5 animate-pulse">
-                <div className="h-3 w-6 bg-white/5 rounded-[2px]" />
-                <div className="h-3 w-32 bg-white/5 rounded-[2px]" />
-                <div className="h-3 w-20 bg-white/5 rounded-[2px] ml-auto" />
-                <div className="h-3 w-16 bg-white/5 rounded-[2px] ml-auto" />
-                <div className="h-3 w-16 bg-white/5 rounded-[2px] ml-auto" />
+              <div key={i} className="grid grid-cols-[36px_1fr_auto] md:grid-cols-[50px_1fr_130px_100px] gap-2 md:gap-4 px-4 md:px-5 py-3 items-center animate-pulse">
+                <div className="h-3 w-5 bg-white/5 rounded" />
+                <div className="h-3 w-28 bg-white/5 rounded" />
+                <div className="h-3 w-16 bg-white/5 rounded ml-auto" />
+                <div className="hidden md:block h-3 w-14 bg-white/5 rounded ml-auto" />
               </div>
             ))
           ) : rows.length === 0 ? (
-            <div className="py-16 text-center flex flex-col items-center justify-center gap-3">
+            <div className="py-12 text-center flex flex-col items-center justify-center gap-3">
               <Trophy size={28} className="text-white/10" />
               <p className="text-ash text-xs">No swaps recorded in this pool yet.</p>
               <button
@@ -330,52 +298,43 @@ function LeaderboardPanel({
               const rank = page * PAGE_SIZE + i + 1;
               const isUser = !!connectedAddress && row.owner.toLowerCase() === connectedAddress.toLowerCase();
               const rankIcon =
-                rank === 1 ? <Crown size={14} className="text-bone" /> :
-                rank === 2 ? <Medal size={14} className="text-ash" /> :
-                rank === 3 ? <Medal size={14} className="text-ash/70" /> :
+                rank === 1 ? <Crown size={14} className="text-yellow-400" /> :
+                rank === 2 ? <Medal size={14} className="text-zinc-300" /> :
+                rank === 3 ? <Medal size={14} className="text-amber-600" /> :
                 <span className="text-ash font-mono text-xs">#{rank}</span>;
 
               return (
                 <div
                   key={row.id || i}
-                  className={`grid grid-cols-1 md:grid-cols-[60px_1fr_1fr_1fr_110px] gap-3 px-5 py-3 items-center transition-colors
-                    ${isUser ? 'bg-white/[0.04] border-l-2 border-bone' : 'hover:bg-white/[0.02]'}`}
+                  className={`grid grid-cols-[36px_1fr_auto] md:grid-cols-[50px_1fr_130px_100px] gap-2 md:gap-4 px-4 md:px-5 py-3 items-center transition-colors
+                    ${isUser ? 'bg-white/[0.04] border-l-2 border-white' : 'hover:bg-white/[0.02]'}`}
                 >
                   <div className="flex items-center">{rankIcon}</div>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1.5 min-w-0">
                     {isUser && (
-                      <span className="text-[10px] font-mono uppercase tracking-[0.1em] bg-white/[0.1] text-bone px-1.5 py-0.5 rounded-[3px]">You</span>
+                      <span className="text-[9px] font-mono uppercase tracking-wider bg-white/10 text-white px-1.5 py-0.5 rounded shrink-0">You</span>
                     )}
                     <a
                       href={`https://liteforge.explorer.caldera.xyz/address/${row.owner}`}
                       target="_blank"
                       rel="noreferrer"
-                      className="font-mono text-xs text-bone/80 hover:text-bone transition-colors flex items-center gap-1"
+                      className="font-mono text-xs text-white/90 hover:text-white transition-colors flex items-center gap-1 truncate"
                     >
-                      <span>{shortAddr(row.owner)}</span>
-                      <ExternalLink size={10} className="text-ash" />
+                      <span className="truncate">{shortAddr(row.owner)}</span>
+                      <ExternalLink size={10} className="text-ash shrink-0" />
                     </a>
                   </div>
 
-                  <div className="flex md:block justify-between items-center">
-                    <span className="md:hidden text-[10px] font-mono text-ash uppercase">Points</span>
-                    <span className="text-xs font-mono text-bone font-medium md:text-right md:block">
+                  <div className="text-right">
+                    <span className="text-xs font-mono text-white font-medium">
                       {formatPoints(row.balance)} <span className="text-[10px] text-ash">PTS</span>
                     </span>
                   </div>
 
-                  <div className="flex md:block justify-between items-center">
-                    <span className="md:hidden text-[10px] font-mono text-ash uppercase">Last Activity</span>
-                    <span className="text-xs text-ash md:text-right md:block font-mono">
+                  <div className="hidden md:block text-right">
+                    <span className="text-xs text-ash font-mono">
                       {row.transfers?.[0] ? timeAgo(row.transfers[0].timestamp) : 'Recent'}
-                    </span>
-                  </div>
-
-                  <div className="flex md:block justify-between items-center">
-                    <span className="md:hidden text-[10px] font-mono text-ash uppercase">Network</span>
-                    <span className="text-[11px] font-mono text-ash md:text-right md:block">
-                      LitVM 4441
                     </span>
                   </div>
                 </div>
@@ -385,7 +344,7 @@ function LeaderboardPanel({
         </div>
 
         {/* Pagination */}
-        <div className="px-5 py-3 border-t border-white/[0.06] flex items-center justify-between bg-[#151515]">
+        <div className="px-4 md:px-5 py-3 border-t border-white/[0.06] flex items-center justify-between bg-[#151515]">
           <span className="text-xs font-mono text-ash">Page {page + 1}</span>
           <div className="flex gap-2">
             <button
@@ -479,7 +438,7 @@ export default function CampaignDetailPage() {
   }
 
   return (
-    <div className="pb-32 sm:pb-40 relative z-10 w-full max-w-5xl mx-auto px-4 md:px-6">
+    <div className="pb-32 sm:pb-40 relative z-10 w-full max-w-4xl mx-auto px-3 sm:px-6">
       {/* End Campaign Confirmation Modal */}
       {showEndModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
@@ -528,23 +487,23 @@ export default function CampaignDetailPage() {
       )}
 
       {/* Back button */}
-      <Link to="/campaigns" className="inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-[0.14em] text-ash hover:text-bone mb-6 transition-colors group">
+      <Link to="/campaigns" className="inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-[0.14em] text-ash hover:text-white mb-6 transition-colors group">
         <ChevronLeft size={14} className="group-hover:-translate-x-0.5 transition-transform" />
         All Campaigns
       </Link>
 
       {/* ── Header ── */}
-      <header className="mb-8">
-        <div className="flex flex-col md:flex-row md:items-start justify-between gap-6 mb-6">
+      <header className="mb-6">
+        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-4">
           <div>
-            <div className="text-[11px] font-mono uppercase tracking-[0.16em] text-ash mb-1">
+            <div className="section-tag mb-1">
               [ Campaign Overview ]
             </div>
-            <div className="flex items-center gap-3">
-              <h1 className="text-2xl md:text-3xl font-medium tracking-[-0.03em] text-bone">
+            <div className="flex flex-wrap items-center gap-2.5">
+              <h1 className="text-2xl sm:text-3xl font-medium tracking-tight text-white">
                 {campaign.name}
               </h1>
-              <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-[4px] text-[10px] font-mono uppercase tracking-[0.12em] border ${
+              <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-[4px] text-[10px] font-mono uppercase tracking-wider border ${
                 !status.isEnded
                   ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
                   : 'bg-red-500/10 border-red-500/20 text-red-400'
@@ -553,17 +512,17 @@ export default function CampaignDetailPage() {
                 {status.badgeText}
               </span>
             </div>
-            <p className="text-ash text-xs mt-1.5 max-w-xl">
+            <p className="text-ash text-xs sm:text-[13px] mt-1 max-w-xl">
               {campaign.description.split('\n')[0]}
             </p>
           </div>
 
-          <div className="flex items-center gap-2.5 shrink-0">
+          <div className="flex items-center gap-2 shrink-0">
             {!status.isEnded && (
               <button
                 type="button"
                 onClick={() => setShowEndModal(true)}
-                className="ui-button ui-button-secondary !min-h-9 !px-3.5 text-xs flex items-center gap-1.5 text-ash hover:text-red-400 hover:border-red-500/30 transition-colors cursor-pointer"
+                className="ui-button ui-button-secondary !min-h-8 !px-3 text-xs flex items-center gap-1.5 text-ash hover:text-red-400 hover:border-red-500/30 transition-colors cursor-pointer"
               >
                 <Clock size={13} />
                 <span>End Campaign</span>
@@ -571,44 +530,29 @@ export default function CampaignDetailPage() {
             )}
             <Link
               to="/faucet"
-              className="ui-button-secondary rounded-[6px] px-3.5 py-2 text-xs flex items-center gap-2"
+              className="ui-button ui-button-secondary !min-h-8 !px-3 text-xs flex items-center gap-1.5"
             >
               <Droplets size={13} className="text-ash" />
-              <span>Get Faucet Tokens</span>
+              <span>Faucet</span>
             </Link>
           </div>
         </div>
 
-        {/* Metadata Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5">
-          <div className="rounded-[6px] bg-[#121212] border border-white/[0.08] p-3.5 flex flex-col gap-1">
-            <span className="text-[10px] font-mono uppercase tracking-[0.14em] text-ash">Reward Type</span>
-            <span className="text-xs font-mono font-medium text-bone">{campaign.rewardType || 'ERC-1155 Points'}</span>
+        {/* Clean 3-Card Summary (Dev contract removed) */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
+          <div className="rounded-[6px] bg-[#121212] border border-[color:var(--border-subtle)] p-3 flex flex-col gap-0.5">
+            <span className="text-[10px] font-mono uppercase tracking-wider text-ash">Reward Type</span>
+            <span className="text-xs font-mono font-medium text-white">{campaign.rewardType || 'ERC-1155 Points'}</span>
           </div>
 
-          <div className="rounded-[6px] bg-[#121212] border border-white/[0.08] p-3.5 flex flex-col gap-1">
-            <span className="text-[10px] font-mono uppercase tracking-[0.14em] text-ash">PointsHook Contract</span>
-            <a
-              href={`https://liteforge.explorer.caldera.xyz/address/${campaign.address}`}
-              target="_blank"
-              rel="noreferrer"
-              className="text-xs font-mono text-bone hover:underline flex items-center gap-1 transition-colors"
-            >
-              <span>{shortAddr(campaign.address)}</span>
-              <ExternalLink size={10} className="text-ash" />
-            </a>
+          <div className="rounded-[6px] bg-[#121212] border border-[color:var(--border-subtle)] p-3 flex flex-col gap-0.5">
+            <span className="text-[10px] font-mono uppercase tracking-wider text-ash">Eligible Pools</span>
+            <span className="text-xs font-mono font-medium text-white">{campaign.poolKeys?.length || 0} Active Pairs</span>
           </div>
 
-          <div className="rounded-[6px] bg-[#121212] border border-white/[0.08] p-3.5 flex flex-col gap-1">
-            <span className="text-[10px] font-mono uppercase tracking-[0.14em] text-ash">Included Pools</span>
-            <span className="text-xs font-mono font-medium text-bone">{campaign.poolKeys?.length || 0} Incentivised</span>
-          </div>
-
-          <div className="rounded-[6px] bg-[#121212] border border-white/[0.08] p-3.5 flex flex-col gap-1">
-            <span className="text-[10px] font-mono uppercase tracking-[0.14em] text-ash">Schedule & Status</span>
-            <span className={`text-xs font-mono font-medium ${status.isEnded ? 'text-red-400' : 'text-emerald-400'}`}>
-              {status.badgeText}
-            </span>
+          <div className="col-span-2 sm:col-span-1 rounded-[6px] bg-[#121212] border border-[color:var(--border-subtle)] p-3 flex flex-col gap-0.5">
+            <span className="text-[10px] font-mono uppercase tracking-wider text-ash">Reward Accrual</span>
+            <span className="text-xs font-mono font-medium text-white">Instant On-Chain</span>
           </div>
         </div>
       </header>
@@ -617,16 +561,16 @@ export default function CampaignDetailPage() {
       <section>
         <div className="flex items-baseline justify-between gap-4 mb-3">
           <div>
-            <div className="text-[11px] font-mono uppercase tracking-[0.16em] text-ash mb-0.5">
+            <div className="section-tag mb-0.5">
               [ Leaderboards ]
             </div>
-            <h2 className="text-base font-medium text-bone tracking-[-0.02em]">Incentivised Pool Rankings</h2>
+            <h2 className="text-base font-medium text-white tracking-tight">Incentivised Pool Rankings</h2>
           </div>
           <span className="text-xs font-mono text-ash">Select pair to view ranking</span>
         </div>
 
         {(!campaign.poolKeys || campaign.poolKeys.length === 0) ? (
-          <div className="rounded-[6px] border border-white/[0.08] bg-[#121212] p-8 text-center text-ash text-sm">
+          <div className="rounded-[8px] border border-white/[0.08] bg-[#121212] p-8 text-center text-ash text-sm">
             <p>No trading pools have been linked to this campaign yet.</p>
             <Link to="/pools/create?hook=points" className="ui-button ui-button-secondary !min-h-9 !px-4 text-xs mt-3 inline-flex items-center gap-1.5">
               <span>+ Create an Incentivized Pool</span>
@@ -635,7 +579,7 @@ export default function CampaignDetailPage() {
         ) : (
           <>
             {/* Tab bar */}
-            <div className="flex items-center gap-1.5 p-1.5 bg-[#121212] border border-white/[0.08] rounded-[6px] mb-6 overflow-x-auto">
+            <div className="flex items-center gap-1.5 p-1.5 bg-[#121212] border border-white/[0.08] rounded-[6px] mb-4 overflow-x-auto">
               {campaign.poolKeys.map((pk, i) => {
                 const t0 = getToken(pk.currency0);
                 const t1 = getToken(pk.currency1);
@@ -646,8 +590,8 @@ export default function CampaignDetailPage() {
                     onClick={() => setActiveTab(i)}
                     className={`flex items-center gap-2 px-3 py-1.5 rounded-[4px] text-xs font-mono font-medium transition-colors cursor-pointer shrink-0 border ${
                       isActive
-                        ? 'bg-white/[0.1] text-bone border-white/30'
-                        : 'text-ash hover:text-bone hover:bg-white/[0.04] border-transparent'
+                        ? 'bg-white/[0.1] text-white border-white/30'
+                        : 'text-ash hover:text-white hover:bg-white/[0.04] border-transparent'
                     }`}
                   >
                     <div className="flex -space-x-1.5">
@@ -660,7 +604,7 @@ export default function CampaignDetailPage() {
                       ))}
                     </div>
                     <span>{t0?.symbol ?? '??'}/{t1?.symbol ?? '??'}</span>
-                    <span className={`text-[10px] font-mono ${isActive ? 'text-bone/70' : 'text-ash/60'}`}>
+                    <span className={`text-[10px] font-mono ${isActive ? 'text-white/70' : 'text-ash/60'}`}>
                       {(pk.fee / 10000).toFixed(2)}%
                     </span>
                   </button>
