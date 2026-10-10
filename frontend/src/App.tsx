@@ -31,6 +31,7 @@ function RootRoute() {
 function MainLayout() {
   const location = useLocation();
   const isSwap = location.pathname === '/swap';
+  const isLanding = location.pathname === '/' || location.pathname === '/landing';
 
   return (
     <div className="flex flex-col min-h-screen bg-[#080808] text-bone grain">
@@ -71,7 +72,7 @@ function MainLayout() {
         />
       </Routes>
       <Footer />
-      <MobileBottomNav />
+      {!isLanding && <MobileBottomNav />}
     </div>
   );
 }

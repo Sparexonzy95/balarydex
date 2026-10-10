@@ -9,6 +9,7 @@ import {
   SUBGRAPH_ENDPOINT,
   POINTSHOOK_SUBGRAPH_ENDPOINT
 } from '../../lib/queries';
+import { API_BASE_URL } from '../../lib/constants';
 
 
 const GET_ALL_SWAPS = `
@@ -195,7 +196,7 @@ export default function ActivityPage() {
       setShowUniqueUsers(true);
 
       // Fast backend API call
-      const res = await fetch('/api/users/stats');
+      const res = await fetch(`${API_BASE_URL}/api/users/stats`);
       if (res.ok) {
         const data = await res.json();
         setUserStats({
@@ -222,7 +223,7 @@ export default function ActivityPage() {
         if (!globalData) setLoading(true);
 
         // 1. Fast local indexer API
-        const res = await fetch('/api/stats');
+        const res = await fetch(`${API_BASE_URL}/api/stats`);
         if (res.ok) {
           const data = await res.json();
           if (data && isMounted) {
@@ -284,7 +285,7 @@ export default function ActivityPage() {
             skip: String(skip)
           });
 
-          const res = await fetch(`/api/activity?${params.toString()}`);
+          const res = await fetch(`${API_BASE_URL}/api/activity?${params.toString()}`);
           if (res.ok) {
             const json = await res.json();
             if (json?.activity && Array.isArray(json.activity)) {

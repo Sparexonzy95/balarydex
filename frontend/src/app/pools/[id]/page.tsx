@@ -8,6 +8,7 @@ import { HOOKS_DETAILS } from '../../../config/hooksDetail';
 import { formatPrice, getDisplayPrice } from '@/utils';
 import { createChart, ColorType, LineSeries, LineType } from 'lightweight-charts';
 import TokenImage from '../../../components/TokenImage';
+import { API_BASE_URL } from '../../../lib/constants';
 
 const getPriceFromSqrt = (sqrtPriceStr: string, token0: any, token1: any) => {
   if (!token0 || !token1 || !sqrtPriceStr) return 0;
@@ -93,7 +94,7 @@ export default function PoolDetailsPage() {
       try {
         if (!pool) setLoading(true);
         // Fast backend query first
-        const res = await fetch(`/api/pools/${id.toLowerCase()}`).catch(() => null);
+        const res = await fetch(`${API_BASE_URL}/api/pools/${id.toLowerCase()}`).catch(() => null);
         if (res && res.ok) {
           const data = await res.json();
           if (data?.pool && isMounted) {
@@ -134,7 +135,7 @@ export default function PoolDetailsPage() {
       try {
         setSwapsLoading(true);
         let fetchedSwaps: any[] = [];
-        const res = await fetch(`/api/pools/${id.toLowerCase()}/swaps?skip=${swapsPage * 6}&first=7`).catch(() => null);
+        const res = await fetch(`${API_BASE_URL}/api/pools/${id.toLowerCase()}/swaps?skip=${swapsPage * 6}&first=7`).catch(() => null);
         if (res && res.ok) {
           const data = await res.json();
           if (data?.swaps && Array.isArray(data.swaps)) {
@@ -222,7 +223,7 @@ export default function PoolDetailsPage() {
     const fetchChartData = async () => {
       try {
         setChartLoading(true);
-        const res = await fetch(`/api/pools/${id.toLowerCase()}/swaps?skip=0&first=100`).catch(() => null);
+        const res = await fetch(`${API_BASE_URL}/api/pools/${id.toLowerCase()}/swaps?skip=0&first=100`).catch(() => null);
         if (res && res.ok) {
           const data = await res.json();
           if (data?.swaps && isMounted) {

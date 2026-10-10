@@ -5,6 +5,10 @@ import { motion } from 'framer-motion';
 export default function MobileBottomNav() {
   const { pathname } = useLocation();
 
+  if (pathname === '/' || pathname === '/landing') {
+    return null;
+  }
+
   const navItems = [
     { label: 'Trade', href: '/swap', icon: ArrowLeftRight },
     { label: 'Pools', href: '/pools', icon: Layers },

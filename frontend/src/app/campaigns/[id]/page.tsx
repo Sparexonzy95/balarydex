@@ -9,6 +9,7 @@ import {
 import { useAccount, usePublicClient } from 'wagmi';
 import { campaigns, type HookCampaign, type PoolKey } from '../../../config/hooksDetail';
 import { TOKENS } from '../../../config/tokens';
+import { API_BASE_URL } from '../../../lib/constants';
 
 // ── helpers ───────────────────────────────────────────────────────────────────
 
@@ -128,7 +129,7 @@ function LeaderboardPanel({
 
     // 1. Fetch from backend indexer API
     try {
-      const res = await fetch(`/api/campaigns/leaderboard?poolId=${poolId}&skip=${page * PAGE_SIZE}&limit=${PAGE_SIZE}`);
+      const res = await fetch(`${API_BASE_URL}/api/campaigns/leaderboard?poolId=${poolId}&skip=${page * PAGE_SIZE}&limit=${PAGE_SIZE}`);
       if (res.ok) {
         const data = await res.json();
         if (!cancelled && data?.pointsBalances) {
@@ -421,7 +422,7 @@ export default function CampaignDetailPage() {
     const st = location.state as any;
     if (st?.campaign) return;
     if (id) {
-      fetch(`/api/campaigns/${id}`)
+      fetch(`${API_BASE_URL}/api/campaigns/${id}`)
         .then(r => r.json())
         .then(d => {
           if (d?.campaign) {
@@ -454,7 +455,7 @@ export default function CampaignDetailPage() {
     setIsEnding(true);
     try {
       const campId = campaign?.id !== undefined ? String(campaign.id) : String(id || '0');
-      const res = await fetch(`/api/campaigns/${campId}/end`, { method: 'POST' });
+      const res = await fetch(`${API_BASE_URL}/api/campaigns/${campId}/end`, { method: 'POST' });
       if (res.ok) {
         setIsEndedLocal(true);
         setShowEndModal(false);

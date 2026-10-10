@@ -9,6 +9,7 @@ import { useUserPositions } from '@/hooks/profile/useUserPositions';
 import Toast from '@/components/Toast';
 import { request } from 'graphql-request';
 import { SUBGRAPH_ENDPOINT, GET_USER_ACTIVITY } from '@/lib/queries';
+import { API_BASE_URL } from '@/lib/constants';
 
 interface ActivityItem {
   id: string;
@@ -151,7 +152,7 @@ export default function ProfilePage() {
 
         // 1. Fetch from fast local backend API
         try {
-          const res = await fetch(`/api/activity?user=${userAddress.toLowerCase()}&limit=50`);
+          const res = await fetch(`${API_BASE_URL}/api/activity?user=${userAddress.toLowerCase()}&limit=50`);
           if (res.ok) {
             const data = await res.json();
             if (data?.activity && Array.isArray(data.activity)) {
