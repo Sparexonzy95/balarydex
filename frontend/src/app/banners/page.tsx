@@ -186,9 +186,9 @@ export default function BannersPage() {
                         {/* Connecting Aura Beam */}
                         <div className="absolute w-20 h-1 bg-gradient-to-r from-yellow-400 to-blue-500 blur-[2px] opacity-75 animate-pulse" />
 
-                        {/* mlSwap Logo (Left) */}
+                        {/* Balary Logo (Left) */}
                         <div className="absolute left-0 w-14 h-14 rounded-2xl bg-black border border-white/10 shadow-xl flex items-center justify-center p-2 hover:scale-105 hover:-rotate-6 transition-all duration-300">
-                          <img src="/logo.svg" alt="mlSwap Logo" className="w-full h-full object-contain" />
+                          <img src="/logo.svg" alt="Balary Logo" className="w-full h-full object-contain" />
                         </div>
                         
                         {/* ArcLens Logo (Right) */}
@@ -256,7 +256,7 @@ export default function BannersPage() {
                   <div className="flex items-center gap-4 relative z-10">
                     <div className="flex -space-x-4 shrink-0">
                       <div className="w-10 h-10 rounded-xl bg-black border border-white/10 flex items-center justify-center p-1.5 shadow-md">
-                        <img src="/logo.svg" alt="mlswap" className="w-full h-full object-contain" />
+                        <img src="/logo.svg" alt="Balary" className="w-full h-full object-contain" />
                       </div>
                       <div className="w-10 h-10 rounded-xl bg-neutral-900 border border-white/10 overflow-hidden shadow-md">
                         <img src="/arclens.jpg" alt="arclens" className="w-full h-full object-cover" />
@@ -265,7 +265,7 @@ export default function BannersPage() {
 
                     <div>
                       <h4 className="text-sm font-bold text-white tracking-tight flex items-center gap-1.5">
-                        mlSwap × ArcLens <span className="text-[10px] bg-primary/10 border border-primary/20 text-primary px-1.5 py-0.5 rounded font-mono font-normal">TRIAL</span>
+                        Balary × ArcLens <span className="text-[10px] bg-primary/10 border border-primary/20 text-primary px-1.5 py-0.5 rounded font-mono font-normal">TRIAL</span>
                       </h4>
                       <p className="text-[11px] text-white/40">Swap and unlock multi-layer points hooks instantly.</p>
                     </div>
@@ -290,7 +290,7 @@ export default function BannersPage() {
                   <div className="space-y-5">
                     {/* Logotypes row */}
                     <div className="flex items-center justify-between">
-                      <img src="/logo.svg" alt="mlswap" className="h-6 object-contain" />
+                      <img src="/logo.svg" alt="Balary" className="h-6 object-contain" />
                       <div className="w-8 h-8 rounded-lg overflow-hidden border border-white/10">
                         <img src="/arclens.jpg" alt="arclens" className="w-full h-full object-cover" />
                       </div>
