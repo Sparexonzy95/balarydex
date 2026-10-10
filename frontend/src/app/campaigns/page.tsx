@@ -5,9 +5,10 @@ import {
   Trophy, ArrowRight, Circle, Layers, ArrowLeftRight, 
   Award, Plus, Clock
 } from 'lucide-react';
+import { useAccount } from 'wagmi';
 import { campaigns, type HookCampaign, type PoolKey } from '../../config/hooksDetail';
 import { TOKENS } from '../../config/tokens';
-import { API_BASE_URL } from '../../lib/constants';
+import { API_BASE_URL, isAdminWallet } from '../../lib/constants';
 
 function computePoolId(pk: PoolKey): string {
   const enc = ethers.AbiCoder.defaultAbiCoder().encode(
@@ -76,6 +77,7 @@ function PoolPill({ pk }: { pk: PoolKey }) {
 }
 
 export default function CampaignsPage() {
+  const { address } = useAccount();
   const [campaignList, setCampaignList] = useState<any[]>(campaigns || []);
   const [page, setPage] = useState(1);
   const CAMPAIGNS_PER_PAGE = 3;
@@ -139,13 +141,15 @@ export default function CampaignsPage() {
           </p>
         </div>
 
-        <Link
-          to="/campaigns/create"
-          className="ui-button ui-button-primary !min-h-8 !px-3.5 text-[12px] self-start sm:self-auto inline-flex items-center gap-1.5"
-        >
-          <Plus size={13} />
-          <span>Create Campaign</span>
-        </Link>
+        {isAdminWallet(address) && (
+          <Link
+            to="/campaigns/create"
+            className="ui-button ui-button-primary !min-h-8 !px-3.5 text-[12px] self-start sm:self-auto inline-flex items-center gap-1.5"
+          >
+            <Plus size={13} />
+            <span>Create Campaign</span>
+          </Link>
+        )}
       </header>
 
       {/* Responsive Stat Strip */}

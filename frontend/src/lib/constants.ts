@@ -18,6 +18,16 @@ export const API_BASE_URL =
     ? 'http://localhost:3102'
     : 'https://api.balary.lol');
 
+export const ADMIN_WALLETS = [
+  '0x99Bc52a8aa5931A652620e901BF434DeD949348d'.toLowerCase(),
+  '0x4e59b44847b379578588920cA78FbF26c0B4956C'.toLowerCase(),
+];
+
+export function isAdminWallet(address?: string | null): boolean {
+  if (!address) return false;
+  return ADMIN_WALLETS.includes(address.toLowerCase());
+}
+
 export const ACTIONS = {
   // --- Liquidity Actions (PositionManager) ---
   INCREASE_LIQUIDITY: 0x00,              // 0

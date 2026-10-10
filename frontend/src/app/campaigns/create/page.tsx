@@ -4,8 +4,9 @@ import {
   Trophy, Zap, ChevronLeft, Sparkles, Check, 
   Layers, Plus, ShieldCheck, Flame, Info, ArrowRight, ExternalLink, Clock
 } from 'lucide-react';
+import { useAccount } from 'wagmi';
 import { TOKENS } from '../../../config/tokens';
-import { POINTSHOOK_ADDRESS, API_BASE_URL } from '../../../lib/constants';
+import { POINTSHOOK_ADDRESS, API_BASE_URL, isAdminWallet } from '../../../lib/constants';
 
 interface PoolOption {
   id: string;
@@ -20,6 +21,8 @@ interface PoolOption {
 
 export default function CreateCampaignPage() {
   const navigate = useNavigate();
+  const { address } = useAccount();
+  const canManage = isAdminWallet(address);
 
   // Form state
   const [name, setName] = useState('');
@@ -137,7 +140,10 @@ export default function CreateCampaignPage() {
     try {
       const res = await fetch(`${API_BASE_URL}/api/campaigns`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'x-admin-wallet': address || '',
+        },
         body: JSON.stringify(payload),
       });
 
@@ -158,6 +164,27 @@ export default function CreateCampaignPage() {
       setSubmitting(false);
     }
   };
+
+  if (!canManage) {
+    return (
+      <div className="pb-32 sm:pb-40 relative z-10 w-full max-w-lg mx-auto px-4 py-20 text-center">
+        <div className="rounded-[8px] border border-white/10 bg-[#121212] p-8 flex flex-col items-center gap-4">
+          <div className="w-12 h-12 rounded-full bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
+            <ShieldCheck size={24} />
+          </div>
+          <h2 className="text-lg font-medium text-white">Deployer Access Required</h2>
+          <p className="text-ash text-[13px] leading-relaxed">
+            Campaign creation is restricted to verified protocol deployer wallets to protect reward integrity, prevent wash-trading, and ensure on-chain hook compliance.
+          </p>
+          <div className="mt-2 flex items-center gap-3">
+            <Link to="/campaigns" className="ui-button ui-button-secondary text-xs">
+              Back to Campaigns
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="pb-32 sm:pb-40 relative z-10 w-full max-w-4xl mx-auto px-4 sm:px-6">

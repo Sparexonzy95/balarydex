@@ -8,7 +8,7 @@ import {
 import { useAccount, usePublicClient } from 'wagmi';
 import { campaigns, type HookCampaign, type PoolKey } from '../../../config/hooksDetail';
 import { TOKENS } from '../../../config/tokens';
-import { API_BASE_URL } from '../../../lib/constants';
+import { API_BASE_URL, isAdminWallet } from '../../../lib/constants';
 
 // ── helpers ───────────────────────────────────────────────────────────────────
 
@@ -410,11 +410,20 @@ export default function CampaignDetailPage() {
     return formatCampaignStatus(campaign);
   }, [campaign, isEndedLocal]);
 
+  const canManage = isAdminWallet(connectedAddress);
+
   const handleEndCampaign = async () => {
+    if (!canManage) return;
     setIsEnding(true);
     try {
       const campId = campaign?.id !== undefined ? String(campaign.id) : String(id || '0');
-      const res = await fetch(`${API_BASE_URL}/api/campaigns/${campId}/end`, { method: 'POST' });
+      const res = await fetch(`${API_BASE_URL}/api/campaigns/${campId}/end`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-admin-wallet': connectedAddress || '',
+        },
+      });
       if (res.ok) {
         setIsEndedLocal(true);
         setShowEndModal(false);
@@ -518,7 +527,7 @@ export default function CampaignDetailPage() {
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
-            {!status.isEnded && (
+            {canManage && !status.isEnded && (
               <button
                 type="button"
                 onClick={() => setShowEndModal(true)}

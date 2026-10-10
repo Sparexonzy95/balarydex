@@ -107,6 +107,22 @@ function writeJson(file, data) {
 }
 
 const POINTSHOOK_ADDRESS = '0x7267CD4fF7f0e9Ba3bf1Ec8f1b8A7D14b16C4040';
+const ADMIN_WALLETS = [
+  '0x99Bc52a8aa5931A652620e901BF434DeD949348d'.toLowerCase(),
+  '0x4e59b44847b379578588920cA78FbF26c0B4956C'.toLowerCase(),
+];
+
+function isAuthorizedAdmin(req, bodyData) {
+  const adminHeader = (req.headers['x-admin-wallet'] || '').trim().toLowerCase();
+  if (adminHeader && ADMIN_WALLETS.includes(adminHeader)) return true;
+
+  if (bodyData && bodyData.creator) {
+    const creator = String(bodyData.creator).trim().toLowerCase();
+    if (ADMIN_WALLETS.includes(creator)) return true;
+  }
+  return false;
+}
+
 const CAMPAIGN_POINTS_FILE = path.join(STORAGE_DIR, 'campaign_points.json');
 const CAMPAIGNS_FILE = path.join(STORAGE_DIR, 'campaigns.json');
 
@@ -921,6 +937,12 @@ function startServer() {
       req.on('end', () => {
         try {
           const data = JSON.parse(body || '{}');
+          if (!isAuthorizedAdmin(req, data)) {
+            res.writeHead(403, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: 'Unauthorized: Only protocol deployer wallets can create campaigns.' }));
+            return;
+          }
+
           if (!data.name || !data.name.trim()) {
             res.writeHead(400, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify({ error: 'Campaign name is required' }));
@@ -967,21 +989,38 @@ function startServer() {
     }
 
     if (pathname.startsWith('/api/campaigns/') && pathname.endsWith('/end') && req.method === 'POST') {
-      const campId = pathname.replace('/api/campaigns/', '').replace('/end', '').trim();
-      let campaigns = readJson(CAMPAIGNS_FILE, INITIAL_CAMPAIGNS);
-      const camp = campaigns.find(c => String(c.id) === campId);
-      if (camp) {
-        camp.active = false;
-        camp.endsAt = Math.floor(Date.now() / 1000);
-        writeJson(CAMPAIGNS_FILE, campaigns);
-        res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ success: true, campaign: camp }));
-        return;
-      } else {
-        res.writeHead(404, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ error: 'Campaign not found' }));
-        return;
-      }
+      let body = '';
+      req.on('data', chunk => { body += chunk; });
+      req.on('end', () => {
+        try {
+          const data = JSON.parse(body || '{}');
+          if (!isAuthorizedAdmin(req, data)) {
+            res.writeHead(403, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: 'Unauthorized: Only protocol deployer wallets can end campaigns.' }));
+            return;
+          }
+
+          const campId = pathname.replace('/api/campaigns/', '').replace('/end', '').trim();
+          let campaigns = readJson(CAMPAIGNS_FILE, INITIAL_CAMPAIGNS);
+          const camp = campaigns.find(c => String(c.id) === campId);
+          if (camp) {
+            camp.active = false;
+            camp.endsAt = Math.floor(Date.now() / 1000);
+            writeJson(CAMPAIGNS_FILE, campaigns);
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ success: true, campaign: camp }));
+            return;
+          } else {
+            res.writeHead(404, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: 'Campaign not found' }));
+            return;
+          }
+        } catch (err) {
+          res.writeHead(500, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ error: err.message }));
+        }
+      });
+      return;
     }
 
     if (pathname.startsWith('/api/campaigns/') && req.method === 'GET') {
