@@ -29,10 +29,10 @@ createAppKit({
   networks: [litvmTestnet],
   projectId,
   metadata: {
-    name: 'Balary Protocol',
-    description: 'Gamified Uniswap v4 DEX on LitVM',
-    url: 'https://balary.xyz',
-    icons: ['https://avatars.githubusercontent.com/u/179229932'],
+    name: 'Balary',
+    description: 'The Premier Decentralized Exchange on LitVM',
+    url: 'https://balary.lol',
+    icons: ['https://balary.lol/balary-icon.png'],
   },
   themeMode: 'dark',
   themeVariables: {
