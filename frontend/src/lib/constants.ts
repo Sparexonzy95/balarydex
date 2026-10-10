@@ -11,7 +11,12 @@ export const UNIVERSALROUTER_ADDRESS = "0xaA01FFaDBad68411a8eE6b134B3BB8E7BAf078
 export const FAUCET_ADDRESS = "0x62e6E1d8e42F804C2691A5CA4e670d9c13d8f261";
 export const POINTSHOOK_ADDRESS = "0x7267CD4fF7f0e9Ba3bf1Ec8f1b8A7D14b16C4040";
 
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
+export const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ||
+  (typeof window !== 'undefined' &&
+  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+    ? 'http://localhost:3102'
+    : 'https://api.balary.lol');
 
 export const ACTIONS = {
   // --- Liquidity Actions (PositionManager) ---

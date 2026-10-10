@@ -180,12 +180,11 @@ export default function PoolsPage() {
     <div className="pb-40 relative z-10 w-full">
 
       {/* Analytics Summary */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-2.5 mb-10">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 mb-8">
         {[
           { label: 'Total TVL', value: formatLargeCurrency(globalData?.poolManagers?.[0]?.totalValueLockedUSD ?? globalData?.totalValueLockedUSD) },
           { label: '1D Volume', value: formatLargeCurrency(globalVol1d) },
           { label: 'All Time Vol', value: formatLargeCurrency(globalData?.poolManagers?.[0]?.totalVolumeUSD ?? globalData?.totalVolumeUSD) },
-          { label: '1D Fees', value: formatLargeCurrency(globalFees1d) },
           { label: 'All Time Fees', value: formatLargeCurrency(globalData?.poolManagers?.[0]?.totalFeesUSD ?? globalData?.totalFeesUSD) },
           { label: 'Total Pools', value: formatNumber(globalData?.poolManagers?.[0]?.poolCount ?? globalData?.poolCount ?? pools.length) },
           { label: 'Total Txns', value: formatNumber(globalData?.poolManagers?.[0]?.txCount ?? globalData?.txCount) },

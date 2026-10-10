@@ -26,15 +26,15 @@
     "volumeUSD": "50.00",
     "feesUSD": "0.15",
     "txCount": "1",
-    "totalValueLockedUSD": "54147.64",
-    "totalValueLockedToken0": "510.3456",
-    "totalValueLockedToken1": "3113.08",
+    "totalValueLockedUSD": "34798.87",
+    "totalValueLockedToken0": "340.2304",
+    "totalValueLockedToken1": "775.83",
     "collectedFeesToken0": "0.0",
     "collectedFeesToken1": "0.0",
     "collectedFeesUSD": "0.00",
     "poolDayData": [
       {
-        "date": 1791504000,
+        "date": 1791590400,
         "volumeUSD": "50.00",
         "feesUSD": "0.15"
       }
@@ -67,15 +67,15 @@
     "volumeUSD": "20.00",
     "feesUSD": "0.06",
     "txCount": "1",
-    "totalValueLockedUSD": "53024.92",
-    "totalValueLockedToken0": "510.3456",
-    "totalValueLockedToken1": "19903.64",
+    "totalValueLockedUSD": "35023.22",
+    "totalValueLockedToken0": "340.2304",
+    "totalValueLockedToken1": "10001.82",
     "collectedFeesToken0": "0.0",
     "collectedFeesToken1": "0.0",
     "collectedFeesUSD": "0.00",
     "poolDayData": [
       {
-        "date": 1791504000,
+        "date": 1791590400,
         "volumeUSD": "20.00",
         "feesUSD": "0.06"
       }
@@ -105,20 +105,20 @@
     "token0Price": "0.1",
     "token1Price": "10",
     "tick": "-299352",
-    "volumeUSD": "10.00",
-    "feesUSD": "0.03",
-    "txCount": "1",
-    "totalValueLockedUSD": "5103.45",
-    "totalValueLockedToken0": "19903.6426",
-    "totalValueLockedToken1": "3113.08",
+    "volumeUSD": "20.00",
+    "feesUSD": "0.06",
+    "txCount": "2",
+    "totalValueLockedUSD": "1776.02",
+    "totalValueLockedToken0": "10001.8213",
+    "totalValueLockedToken1": "775.83",
     "collectedFeesToken0": "0.0",
     "collectedFeesToken1": "0.0",
     "collectedFeesUSD": "0.00",
     "poolDayData": [
       {
-        "date": 1791504000,
-        "volumeUSD": "10.00",
-        "feesUSD": "0.03"
+        "date": 1791590400,
+        "volumeUSD": "20.00",
+        "feesUSD": "0.06"
       }
     ]
   },
@@ -149,15 +149,15 @@
     "volumeUSD": "10.00",
     "feesUSD": "0.03",
     "txCount": "1",
-    "totalValueLockedUSD": "1096816.62",
-    "totalValueLockedToken0": "10937035.3871",
-    "totalValueLockedToken1": "3113.08",
+    "totalValueLockedUSD": "547627.60",
+    "totalValueLockedToken0": "5468517.6936",
+    "totalValueLockedToken1": "775.83",
     "collectedFeesToken0": "0.0",
     "collectedFeesToken1": "0.0",
     "collectedFeesUSD": "0.00",
     "poolDayData": [
       {
-        "date": 1791504000,
+        "date": 1791590400,
         "volumeUSD": "10.00",
         "feesUSD": "0.03"
       }
@@ -190,15 +190,15 @@
     "volumeUSD": "20.00",
     "feesUSD": "0.06",
     "txCount": "1",
-    "totalValueLockedUSD": "3333.00",
+    "totalValueLockedUSD": "995.75",
     "totalValueLockedToken0": "219914.0392",
-    "totalValueLockedToken1": "3113.08",
+    "totalValueLockedToken1": "775.83",
     "collectedFeesToken0": "0.0",
     "collectedFeesToken1": "0.0",
     "collectedFeesUSD": "0.00",
     "poolDayData": [
       {
-        "date": 1791504000,
+        "date": 1791590400,
         "volumeUSD": "20.00",
         "feesUSD": "0.06"
       }
@@ -231,15 +231,15 @@
     "volumeUSD": "0.00",
     "feesUSD": "0.00",
     "txCount": "1",
-    "totalValueLockedUSD": "1144738.09",
-    "totalValueLockedToken0": "510.3456",
-    "totalValueLockedToken1": "10937035.39",
+    "totalValueLockedUSD": "580874.81",
+    "totalValueLockedToken0": "340.2304",
+    "totalValueLockedToken1": "5468517.69",
     "collectedFeesToken0": "0.0",
     "collectedFeesToken1": "0.0",
     "collectedFeesUSD": "0.00",
     "poolDayData": [
       {
-        "date": 1791504000,
+        "date": 1791590400,
         "volumeUSD": "0.00",
         "feesUSD": "0.00"
       }

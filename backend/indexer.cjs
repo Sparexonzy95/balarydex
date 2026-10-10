@@ -232,16 +232,25 @@ async function syncBlockchain() {
       }
     }
 
-    // Assign TVL per pool based on held reserves
+    // Distribute token reserves by pool count to prevent double-counting TVL
+    const tokenPoolCounts = {};
+    pools.forEach(pool => {
+      const sym0 = pool.token0?.symbol;
+      const sym1 = pool.token1?.symbol;
+      if (sym0) tokenPoolCounts[sym0] = (tokenPoolCounts[sym0] || 0) + 1;
+      if (sym1) tokenPoolCounts[sym1] = (tokenPoolCounts[sym1] || 0) + 1;
+    });
+
     pools.forEach(pool => {
       const sym0 = pool.token0.symbol;
       const sym1 = pool.token1.symbol;
       const t0 = getTokenInfo(pool.token0.id);
       const t1 = getTokenInfo(pool.token1.id);
 
-      // Estimate share of pool reserves
-      const reserve0 = (balances[sym0] || 0) / (sym0 === 'WLTC' ? 2 : 1);
-      const reserve1 = (balances[sym1] || 0) / (sym1 === 'WLTC' ? 2 : 1);
+      const count0 = tokenPoolCounts[sym0] || 1;
+      const count1 = tokenPoolCounts[sym1] || 1;
+      const reserve0 = (balances[sym0] || 0) / count0;
+      const reserve1 = (balances[sym1] || 0) / count1;
 
       const tvlUSD = (reserve0 * t0.priceUSD) + (reserve1 * t1.priceUSD);
       pool.totalValueLockedUSD = tvlUSD > 0 ? tvlUSD.toFixed(2) : pool.totalValueLockedUSD;
@@ -268,11 +277,33 @@ async function syncBlockchain() {
     console.warn('[Sync] Balance update error:', err.message);
   }
 
-  // Calculate global stats
+  // Retroactive fix for any swap where sender was router
+  for (const s of swaps) {
+    const sSender = (s.sender || '').toLowerCase();
+    if (sSender === '0xaa01ffadbad68411a8ee6b134b3bb8e7baf078f6' || sSender === POOLMANAGER_ADDRESS.toLowerCase()) {
+      const txHash = s.transaction?.id || s.id.split('-')[0];
+      if (txHash && txHash.startsWith('0x')) {
+        try {
+          const tx = await client.getTransaction({ hash: txHash });
+          if (tx && tx.from) {
+            s.sender = tx.from;
+            s.origin = tx.from;
+          }
+        } catch (_) {}
+      }
+    }
+  }
+
+  // Calculate accurate global stats
   const totalTVL = pools.reduce((acc, p) => acc + Number(p.totalValueLockedUSD || 0), 0);
   const totalVolume = swaps.reduce((acc, s) => acc + Number(s.amountUSD || 0), 0);
   const totalFees = pools.reduce((acc, p) => acc + Number(p.feesUSD || 0), 0);
-  const todayTimestamp = Math.floor(Date.now() / 1000 / 86400) * 86400;
+  const now = Math.floor(Date.now() / 1000);
+  const dayAgo = now - 86400;
+  const swaps24h = swaps.filter(s => Number(s.timestamp || 0) >= dayAgo);
+  const vol24h = swaps24h.reduce((acc, s) => acc + Number(s.amountUSD || 0), 0);
+  const fees24h = swaps24h.reduce((acc, s) => acc + Number(s.feeUSD || 0), 0);
+  const todayTimestamp = Math.floor(now / 86400) * 86400;
 
   const stats = {
     poolManagers: [
@@ -289,8 +320,8 @@ async function syncBlockchain() {
     uniswapDayDatas: [
       {
         date: todayTimestamp,
-        volumeUSD: totalVolume.toFixed(2),
-        feesUSD: totalFees.toFixed(2)
+        volumeUSD: vol24h.toFixed(2),
+        feesUSD: fees24h.toFixed(2)
       }
     ]
   };
@@ -417,13 +448,20 @@ async function pollRecentBlocks() {
           const volUSD = Math.max(abs0 * t0.priceUSD, abs1 * t1.priceUSD);
           const feeUSD = volUSD * (Number(log.args.fee || 3000) / 1_000_000);
 
+          let realSender = log.args.sender;
+          try {
+            const tx = await client.getTransaction({ hash: log.transactionHash });
+            if (tx && tx.from) realSender = tx.from;
+          } catch (_) {}
+
           const swapId = `${log.transactionHash}-${log.logIndex !== undefined ? log.logIndex : log.args.id}`;
-          if (!swaps.some(s => s.id === swapId || (s.transaction?.id === log.transactionHash && s.pool?.id?.toLowerCase() === poolId.toLowerCase()))) {
+          const existingIdx = swaps.findIndex(s => s.id === swapId || (s.transaction?.id === log.transactionHash && s.pool?.id?.toLowerCase() === poolId.toLowerCase()));
+          if (existingIdx === -1) {
             swaps.unshift({
               id: swapId,
               timestamp: String(Math.floor(Date.now() / 1000)),
-              sender: log.args.sender,
-              origin: log.args.sender,
+              sender: realSender,
+              origin: realSender,
               pool: { id: poolId },
               token0: pool.token0,
               token1: pool.token1,
@@ -435,6 +473,12 @@ async function pollRecentBlocks() {
               tick: String(log.args.tick),
               transaction: { id: log.transactionHash }
             });
+          } else {
+            const curSender = (swaps[existingIdx].sender || '').toLowerCase();
+            if (curSender === '0xaa01ffadbad68411a8ee6b134b3bb8e7baf078f6' || curSender === POOLMANAGER_ADDRESS.toLowerCase()) {
+              swaps[existingIdx].sender = realSender;
+              swaps[existingIdx].origin = realSender;
+            }
           }
         }
         writeJson(SWAPS_FILE, swaps);
@@ -1016,6 +1060,13 @@ function startServer() {
           // Check if already recorded
           const existing = swaps.find(s => (s.id || '').toLowerCase() === txHash.toLowerCase() || (s.transaction?.id || '').toLowerCase() === txHash.toLowerCase());
           if (existing) {
+            const curSender = (existing.sender || '').toLowerCase();
+            const newSender = (data.sender || '').toLowerCase();
+            if (newSender && (curSender === '0xaa01ffadbad68411a8ee6b134b3bb8e7baf078f6' || curSender === POOLMANAGER_ADDRESS.toLowerCase() || !curSender)) {
+              existing.sender = data.sender;
+              existing.origin = data.sender;
+              writeJson(SWAPS_FILE, swaps);
+            }
             res.writeHead(200, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify({ success: true, swap: existing }));
             return;

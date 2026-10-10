@@ -292,7 +292,9 @@ export default function ActivityPage() {
               // Read local recent swaps
               const localRecent = (() => {
                 try {
-                  return JSON.parse(localStorage.getItem('mlswap:recent_swaps') || '[]');
+                  const b = localStorage.getItem('balary:recent_swaps');
+                  const m = localStorage.getItem('mlswap:recent_swaps');
+                  return JSON.parse(b || m || '[]');
                 } catch {
                   return [];
                 }
@@ -485,11 +487,6 @@ export default function ActivityPage() {
       accent: false,
     },
     {
-      label: '1D Fees',
-      value: loading ? null : formatLargeCurrency(globalFees1d),
-      accent: false,
-    },
-    {
       label: 'All Time Fees',
       value: loading ? null : formatLargeCurrency(globalData?.poolManagers?.[0]?.totalFeesUSD),
       accent: false,
@@ -510,7 +507,7 @@ export default function ActivityPage() {
     <div className="pb-40 relative z-10 w-full">
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-2.5 mb-10">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 mb-8">
         {statCards.map((card) => (
           <div
             key={card.label}

@@ -1,5 +1,37 @@
 [
   {
+    "id": "0x892e33b6f7a24c982b1e84e00bd2583e6fee592130ca7f90c2f55da57e4abe53-15",
+    "timestamp": "1791620748",
+    "sender": "0x99bc52a8aa5931a652620e901bf434ded949348d",
+    "origin": "0x99bc52a8aa5931a652620e901bf434ded949348d",
+    "pool": {
+      "id": "0x417bab8ab2bc44e523bf24e3bf46694c0b043c7fbcf1fe306bc09bc78fc16bb7"
+    },
+    "token0": {
+      "id": "0xa0Cf27f53636529c227845ce16b49AB759dD8cd0",
+      "symbol": "BAL",
+      "name": "Balary",
+      "decimals": 18,
+      "derivedUSDC": "0.1"
+    },
+    "token1": {
+      "id": "0xD88cA23473DF0fAf9FCDE8d6880f4c8b88df69A5",
+      "symbol": "USDC",
+      "name": "USD Coin",
+      "decimals": 6,
+      "derivedUSDC": "1"
+    },
+    "amount0": "100.0000",
+    "amount1": "9.74",
+    "amountUSD": "10.00",
+    "feeUSD": "0.0300",
+    "sqrtPriceX96": "24671905382075811895689",
+    "tick": "-299659",
+    "transaction": {
+      "id": "0x892e33b6f7a24c982b1e84e00bd2583e6fee592130ca7f90c2f55da57e4abe53"
+    }
+  },
+  {
     "id": "0x1b50d9d66a4dc3bdda3853679faed7e34e2e1f480bcb0a65b9034452f25376ee-55",
     "timestamp": "1791557655",
     "sender": "0x82B2154be998895317FFe02f25F2Da3B40B2F14a",

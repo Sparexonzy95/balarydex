@@ -9,7 +9,7 @@ import { useUserPositions } from '@/hooks/profile/useUserPositions';
 import Toast from '@/components/Toast';
 import { request } from 'graphql-request';
 import { SUBGRAPH_ENDPOINT, GET_USER_ACTIVITY } from '@/lib/queries';
-import { API_BASE_URL } from '@/lib/constants';
+import { API_BASE_URL, UNIVERSALROUTER_ADDRESS, POOLMANAGER_ADDRESS } from '@/lib/constants';
 
 interface ActivityItem {
   id: string;
@@ -150,7 +150,7 @@ export default function ProfilePage() {
 
         let items: ActivityItem[] = [];
 
-        // 1. Fetch from fast local backend API
+        // 1. Fetch from backend user-specific activity API
         try {
           const res = await fetch(`${API_BASE_URL}/api/activity?user=${userAddress.toLowerCase()}&limit=50`);
           if (res.ok) {
@@ -161,7 +161,40 @@ export default function ProfilePage() {
           }
         } catch (_) {}
 
-        // 2. Fallback to subgraph if empty
+        // 2. Also check /api/swaps to catch swaps where user was sender/origin or tx sender
+        try {
+          const sRes = await fetch(`${API_BASE_URL}/api/swaps`);
+          if (sRes.ok) {
+            const sData = await sRes.json();
+            if (Array.isArray(sData?.swaps)) {
+              const uNorm = userAddress.toLowerCase();
+              for (const s of sData.swaps) {
+                const sSender = (s.sender || '').toLowerCase();
+                const sOrigin = (s.origin || '').toLowerCase();
+                const txHash = (s.transaction?.id || s.id || '').split('-')[0].toLowerCase();
+                
+                let isMatch = sSender === uNorm || sOrigin === uNorm;
+                if (!isMatch && (sSender === UNIVERSALROUTER_ADDRESS.toLowerCase() || sSender === POOLMANAGER_ADDRESS.toLowerCase())) {
+                  try {
+                    const tx = await publicClient?.getTransaction({ hash: txHash as `0x${string}` });
+                    if (tx && tx.from.toLowerCase() === uNorm) {
+                      isMatch = true;
+                    }
+                  } catch (_) {}
+                }
+
+                if (isMatch) {
+                  const already = items.some(it => (it.hash || it.id).toLowerCase().startsWith(txHash));
+                  if (!already) {
+                    items.push(mapSwap(s, txHash, Number(s.timestamp || Math.floor(Date.now() / 1000))));
+                  }
+                }
+              }
+            }
+          }
+        } catch (_) {}
+
+        // 3. Fallback to subgraph if empty
         if (items.length === 0) {
           const data: any = await request(SUBGRAPH_ENDPOINT, GET_USER_ACTIVITY, {
             user: userAddress.toLowerCase(),
@@ -183,10 +216,12 @@ export default function ProfilePage() {
           }
         }
 
-        // Merge local storage recent swaps for this user
+        // 4. Merge local storage recent swaps for this user (supporting both balary and legacy keys)
         const localRecent = (() => {
           try {
-            return JSON.parse(localStorage.getItem('mlswap:recent_swaps') || '[]');
+            const b = localStorage.getItem('balary:recent_swaps');
+            const m = localStorage.getItem('mlswap:recent_swaps');
+            return JSON.parse(b || m || '[]');
           } catch {
             return [];
           }

@@ -359,8 +359,12 @@ export function useSwap() {
 
         // 2. Cache in localStorage so all views immediately show it
         try {
-          const stored = JSON.parse(localStorage.getItem('mlswap:recent_swaps') || '[]');
+          const stored = JSON.parse(
+            localStorage.getItem('balary:recent_swaps') ||
+            localStorage.getItem('mlswap:recent_swaps') || '[]'
+          );
           const updated = [swapPayload, ...stored.filter((s: any) => (s.txHash || s.hash) !== hash)].slice(0, 50);
+          localStorage.setItem('balary:recent_swaps', JSON.stringify(updated));
           localStorage.setItem('mlswap:recent_swaps', JSON.stringify(updated));
           window.dispatchEvent(new CustomEvent('mlswap:swap_completed', { detail: swapPayload }));
         } catch (_) {}
